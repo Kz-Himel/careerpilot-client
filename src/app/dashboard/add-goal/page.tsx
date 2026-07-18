@@ -2,7 +2,8 @@
 "use client";
 
 import { useState } from "react";
-import { useMutation } from "@tanstack/react-query";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
+import { useRouter } from "next/navigation";
 import {
   FiTarget,
   FiFileText,
@@ -13,19 +14,19 @@ import {
   FiCheckCircle,
   FiAlertCircle,
 } from "react-icons/fi";
-// assuming this import exists or you have defined your types elsewhere
-// import type { GoalFormData } from "@/types/goal";
 
-// Temporary interface just to make the code compile without errors
+// প্রজেক্টের Better Auth ক্লায়েন্ট
+import { authClient } from "@/lib/auth-client"; 
+
 interface GoalFormData {
-    title: string;
-    targetRole: string;
-    description: string;
-    dueDate: string;
-    priority: 'low' | 'medium' | 'high';
-    imageUrl?: string;
-  }
-  
+  title: string;
+  targetRole: string;
+  description: string;
+  dueDate: string;
+  priority: "low" | "medium" | "high";
+  imageUrl?: string;
+}
+
 const initialForm: GoalFormData = {
   title: "",
   targetRole: "",
@@ -35,34 +36,34 @@ const initialForm: GoalFormData = {
   imageUrl: "",
 };
 
-// Replace with your actual auth client
-const authClient = {
-    token: async () => ({ data: { token: 'mock-token'} })
-}
-
 async function createGoal(payload: GoalFormData) {
+  // তোর দেখানো নিয়মে Better Auth থেকে অ্যাক্টিভ টোকেন নেওয়া হচ্ছে
   const tokenRes = await authClient.token?.();
   const token = tokenRes?.data?.token;
+
+  if (!token) {
+    throw new Error("আপনার সেশন শেষ হয়ে গেছে। দয়া করে আবার লগইন করুন।");
+  }
 
   const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/goals`, {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
-      Authorization: `Bearer ${token}`,
+      Authorization: `Bearer ${token}`, 
     },
     body: JSON.stringify(payload),
   });
 
   const data = await res.json();
-
   if (!res.ok || !data.success) {
     throw new Error(data.message || "Failed to create goal");
   }
-
   return data;
 }
 
 export default function AddGoalPage() {
+  const router = useRouter();
+  const queryClient = useQueryClient();
   const [form, setForm] = useState<GoalFormData>(initialForm);
   const [errors, setErrors] = useState<{ [key: string]: string }>({});
   const [showSuccess, setShowSuccess] = useState(false);
@@ -72,7 +73,12 @@ export default function AddGoalPage() {
     onSuccess: () => {
       setShowSuccess(true);
       setForm(initialForm);
-      setTimeout(() => setShowSuccess(false), 3000);
+      queryClient.invalidateQueries({ queryKey: ["explore-goals"] });
+      
+      setTimeout(() => {
+        setShowSuccess(false);
+        router.push("/explore"); 
+      }, 2000);
     },
   });
 
@@ -97,19 +103,15 @@ export default function AddGoalPage() {
     mutation.mutate(form);
   };
 
-  // Input styles reusable class with highlighting improvements
   const inputClasses = (fieldError: string | undefined) => `
     min-h-[44px] w-full rounded-lg border py-2.5 pl-10 pr-3 
     text-sm outline-none transition-colors 
     focus:border-blue-600 focus:ring-1 focus:ring-blue-600
-    /* হাইলাইটের জন্য পরিবর্তন: */
-    text-gray-950 font-medium  /* লেখা গাঢ় কালো ও মিডিয়াম ফন্ট */
-    border-gray-300 shadow-inner /* বর্ডার কালার সামান্য গাঢ় এবং ভেতরের শ্যাডো */
-    ${fieldError ? "border-red-400 bg-red-50" : "bg-gray-50/50"}
+    text-gray-950 font-medium border-gray-300 shadow-inner
+    \${fieldError ? "border-red-400 bg-red-50" : "bg-gray-50/50"}
   `;
 
   return (
-    // পেজের ব্যাকগ্রাউন্ড সাদা এবং ফুল স্ক্রিন করার জন্য পরিবর্তন
     <div className="bg-white min-h-screen">
       <div className="mx-auto max-w-2xl px-4 py-8 sm:px-6 sm:py-10">
         <div className="mb-6 sm:mb-8 border-b border-gray-100 pb-5">
@@ -123,8 +125,8 @@ export default function AddGoalPage() {
           <div className="mb-6 flex items-start gap-3 rounded-lg bg-green-50 px-5 py-4 text-sm text-green-800 border border-green-200 shadow-sm">
             <FiCheckCircle className="mt-0.5 h-5 w-5 shrink-0 text-green-600" />
             <div>
-                <p className="font-semibold">Success!</p>
-                <p>Goal added successfully!</p>
+              <p className="font-semibold">Success!</p>
+              <p>Goal added successfully!</p>
             </div>
           </div>
         )}
@@ -133,17 +135,13 @@ export default function AddGoalPage() {
           <div className="mb-6 flex items-start gap-3 rounded-lg bg-red-50 px-5 py-4 text-sm text-red-800 border border-red-200 shadow-sm">
             <FiAlertCircle className="mt-0.5 h-5 w-5 shrink-0 text-red-600" />
             <div>
-                <p className="font-semibold">Error!</p>
-                <p>{(mutation.error as Error).message}</p>
+              <p className="font-semibold">Error!</p>
+              <p>{(mutation.error as Error).message}</p>
             </div>
           </div>
         )}
 
-        <form
-          onSubmit={handleSubmit}
-          className="flex flex-col gap-5 rounded-2xl border border-gray-100 bg-white p-6 shadow-lg sm:gap-6 sm:p-8"
-          noValidate
-        >
+        <form onSubmit={handleSubmit} className="flex flex-col gap-5 rounded-2xl border border-gray-100 bg-white p-6 shadow-lg sm:gap-6 sm:p-8" noValidate>
           <div>
             <label className="mb-2 block text-sm font-semibold text-gray-800">Goal Title</label>
             <div className="relative">
@@ -218,10 +216,9 @@ export default function AddGoalPage() {
                   <option value="high">High</option>
                 </select>
                 <div className="pointer-events-none absolute right-3 top-1/2 h-5 w-5 -translate-y-1/2 text-gray-500">
-                    {/* simple custom arrow for select */}
-                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
-                        <path fillRule="evenodd" d="M5.23 7.21a.75.75 0 011.06.02L10 11.168l3.71-3.938a.75.75 0 111.08 1.04l-4.25 4.5a.75.75 0 01-1.08 0l-4.25-4.5a.75.75 0 01.02-1.06z" clipRule="evenodd" />
-                    </svg>
+                  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
+                    <path fillRule="evenodd" d="M5.23 7.21a.75.75 0 011.06.02L10 11.168l3.71-3.938a.75.75 0 111.08 1.04l-4.25 4.5a.75.75 0 01-1.08 0l-4.25-4.5a.75.75 0 01.02-1.06z" clipRule="evenodd" />
+                  </svg>
                 </div>
               </div>
             </div>

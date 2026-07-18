@@ -1,4 +1,5 @@
 // components/GoalCard.tsx
+import Link from "next/link";
 import { FiTarget, FiCalendar } from "react-icons/fi";
 import type { Goal } from "@/types/goal";
 
@@ -31,9 +32,8 @@ export default function GoalCard({ goal }: GoalCardProps) {
           {goal.title}
         </h3>
         <span
-          className={`shrink-0 rounded-full px-2 py-0.5 text-[11px] font-medium capitalize ${
-            priorityStyles[goal.priority] || "bg-gray-100 text-gray-600"
-          }`}
+          className={`shrink-0 rounded-full px-2 py-0.5 text-[11px] font-medium capitalize ${priorityStyles[goal.priority] || "bg-gray-100 text-gray-600"
+            }`}
         >
           {goal.priority}
         </span>
@@ -56,9 +56,12 @@ export default function GoalCard({ goal }: GoalCardProps) {
         </span>
       </div>
 
-      <button className="mt-auto min-h-[38px] w-full rounded-lg bg-blue-600 text-xs font-semibold text-white transition-colors active:bg-blue-700 sm:hover:bg-blue-700">
+      <Link
+        href={`/explore/${goal._id}`}
+        className="mt-auto flex min-h-[38px] w-full items-center justify-center rounded-lg bg-blue-600 text-xs font-semibold text-white transition-colors active:bg-blue-700 sm:hover:bg-blue-700"
+      >
         View Details
-      </button>
+      </Link>
     </div>
   );
 }

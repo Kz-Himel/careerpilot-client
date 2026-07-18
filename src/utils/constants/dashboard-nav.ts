@@ -46,7 +46,7 @@ export interface DashboardNavItem {
 
 export const dashboardNavItems: DashboardNavItem[] = [
   { label: "Dashboard", href: "/dashboard", icon: FiGrid },
-  { label: "Add Goals", href: "/dashboard/add-goals", icon: IoMdAddCircleOutline },
+  { label: "Add Goals", href: "/dashboard/add-goal", icon: IoMdAddCircleOutline },
   { label: "Manage goals", href: "/dashboard/manage-goals", icon: FiTarget },
   { label: "AI Roadmap", href: "/dashboard/ai-roadmap", icon: FiMap },
   { label: "AI Chat", href: "/dashboard/ai-chat", icon: FiMessageCircle },
