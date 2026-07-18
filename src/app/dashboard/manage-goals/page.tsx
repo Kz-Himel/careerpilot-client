@@ -21,7 +21,7 @@ async function fetchGoals(): Promise<Goal[]> {
   const tokenRes = await authClient.token?.();
   const token = tokenRes?.data?.token;
 
-  const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/goals`, {
+  const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/goals/my`, {
     headers: { Authorization: `Bearer ${token}` },
   });
 
@@ -34,7 +34,7 @@ async function deleteGoal(id: string) {
   const tokenRes = await authClient.token?.();
   const token = tokenRes?.data?.token;
 
-  const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/goals/${id}`, {
+  const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/my/${id}`, {
     method: "DELETE",
     headers: { Authorization: `Bearer ${token}` },
   });
