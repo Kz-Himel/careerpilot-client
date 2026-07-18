@@ -5,7 +5,8 @@ import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { FiMenu } from "react-icons/fi";
 import Sidebar from "@/components/dashboard/Sidebar";
-import { authClient } from "@/lib/auth-client"; 
+import { authClient } from "@/lib/auth-client";
+import Providers from "../providers";
 
 export default function DashboardLayout({ children }: { children: React.ReactNode }) {
   const router = useRouter();
@@ -41,7 +42,9 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
 
         {/* Dynamic page context (Goals/Roadmap/Chat etc.) wrapper */}
         <main className="px-4 py-5 sm:px-6 sm:py-6 lg:px-8 lg:py-8">
+          <Providers>
           {children}
+        </Providers>
         </main>
       </div>
     </div>
