@@ -7,15 +7,16 @@ import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import {
   FiPlus,
   FiEye,
+  FiEdit2,
   FiTrash2,
   FiTarget,
   FiCalendar,
-  FiFlag,
   FiAlertCircle,
   FiX,
 } from "react-icons/fi";
 import { authClient } from "@/lib/auth-client";
 import type { Goal } from "@/types/goal";
+import EditGoalForm from "@/components/goals/EditGoalForm";
 
 async function fetchGoals(): Promise<Goal[]> {
   const tokenRes = await authClient.token?.();
@@ -64,7 +65,7 @@ function GoalCardSkeleton() {
 export default function ManageGoalsPage() {
   const queryClient = useQueryClient();
   const [deleteTarget, setDeleteTarget] = useState<Goal | null>(null);
-  const [viewTarget, setViewTarget] = useState<Goal | null>(null);
+  const [editTarget, setEditTarget] = useState<Goal | null>(null);
 
   const {
     data: goals,
@@ -172,13 +173,21 @@ export default function ManageGoalsPage() {
                 </span>
               </div>
 
+              {/* Action buttons - View / Edit / Delete */}
               <div className="mt-auto flex items-center gap-2 border-t border-gray-100 pt-3">
-                <button
-                  onClick={() => setViewTarget(goal)}
+                <Link
+                  href={`/explore/${goal._id}`}
                   className="flex min-h-[38px] flex-1 items-center justify-center gap-1.5 rounded-lg border border-gray-200 text-xs font-medium text-gray-700 active:bg-gray-50 sm:hover:bg-gray-50"
                 >
                   <FiEye className="h-3.5 w-3.5" />
                   View
+                </Link>
+                <button
+                  onClick={() => setEditTarget(goal)}
+                  className="flex min-h-[38px] flex-1 items-center justify-center gap-1.5 rounded-lg border border-blue-100 text-xs font-medium text-blue-600 active:bg-blue-50 sm:hover:bg-blue-50"
+                >
+                  <FiEdit2 className="h-3.5 w-3.5" />
+                  Edit
                 </button>
                 <button
                   onClick={() => setDeleteTarget(goal)}
@@ -193,45 +202,24 @@ export default function ManageGoalsPage() {
         </div>
       )}
 
-      {/* View modal */}
-      {viewTarget && (
+      {/* Edit modal */}
+      {editTarget && (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 p-4">
-          <div className="w-full max-w-md rounded-2xl bg-white p-5 shadow-xl sm:p-6">
-            <div className="mb-4 flex items-start justify-between">
-              <h3 className="text-lg font-bold text-gray-900">{viewTarget.title}</h3>
+          <div className="w-full max-w-lg">
+            <div className="mb-3 flex items-center justify-between px-1">
+              <h3 className="text-base font-bold text-white sm:text-lg">Edit Goal</h3>
               <button
-                onClick={() => setViewTarget(null)}
-                className="flex h-8 w-8 items-center justify-center rounded-md text-gray-400 hover:bg-gray-50"
+                onClick={() => setEditTarget(null)}
+                className="flex h-8 w-8 items-center justify-center rounded-md text-white/80 hover:bg-white/10"
               >
                 <FiX className="h-4 w-4" />
               </button>
             </div>
-            <div className="flex flex-col gap-3 text-sm">
-              <div>
-                <span className="font-medium text-gray-500">Target Role: </span>
-                <span className="text-gray-800">{viewTarget.targetRole}</span>
-              </div>
-              <div>
-                <span className="font-medium text-gray-500">Description: </span>
-                <p className="mt-1 text-gray-700">{viewTarget.description}</p>
-              </div>
-              <div className="flex items-center gap-2">
-                <FiFlag className="h-4 w-4 text-gray-400" />
-                <span className="capitalize text-gray-700">{viewTarget.priority} priority</span>
-              </div>
-              <div className="flex items-center gap-2">
-                <FiCalendar className="h-4 w-4 text-gray-400" />
-                <span className="text-gray-700">
-                  Due {new Date(viewTarget.dueDate).toLocaleDateString()}
-                </span>
-              </div>
-            </div>
-            <button
-              onClick={() => setViewTarget(null)}
-              className="mt-5 min-h-[42px] w-full rounded-lg bg-blue-600 text-sm font-semibold text-white hover:bg-blue-700"
-            >
-              Close
-            </button>
+            <EditGoalForm
+              goal={editTarget}
+              onSuccess={() => setEditTarget(null)}
+              onCancel={() => setEditTarget(null)}
+            />
           </div>
         </div>
       )}
