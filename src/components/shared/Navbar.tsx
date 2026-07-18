@@ -1,4 +1,3 @@
-// components/Navbar.tsx
 "use client";
 
 import { useState, useRef, useEffect } from "react";
@@ -159,14 +158,14 @@ export default function Navbar() {
           {!isLoggedIn ? (
             <>
               <Link
-                href="/login"
+                href="/auth/login"
                 onClick={login}
                 className="rounded-md px-4 py-2 text-sm font-medium text-gray-700 hover:text-blue-600"
               >
                 Log in
               </Link>
               <Link
-                href="/register"
+                href="/auth/register"
                 className="rounded-md bg-blue-600 px-4 py-2 text-sm font-medium text-white transition-colors hover:bg-blue-700"
               >
                 Get Started
@@ -256,7 +255,7 @@ export default function Navbar() {
             {!isLoggedIn ? (
               <>
                 <Link
-                  href="/login"
+                  href="/auth/login"
                   onClick={() => {
                     login();
                     setMobileOpen(false);
@@ -266,7 +265,7 @@ export default function Navbar() {
                   Log in
                 </Link>
                 <Link
-                  href="/register"
+                  href="/auth/register"
                   onClick={() => setMobileOpen(false)}
                   className="rounded-md bg-blue-600 px-4 py-2.5 text-center text-sm font-medium text-white"
                 >
