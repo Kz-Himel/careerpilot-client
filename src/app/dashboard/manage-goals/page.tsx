@@ -3,12 +3,11 @@
 
 import { useState } from "react";
 import Link from "next/link";
-import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
+import { useQuery } from "@tanstack/react-query";
 import {
   FiPlus,
   FiEye,
   FiEdit2,
-  FiTrash2,
   FiTarget,
   FiCalendar,
   FiAlertCircle,
@@ -17,6 +16,7 @@ import {
 import { authClient } from "@/lib/auth-client";
 import type { Goal } from "@/types/goal";
 import EditGoalForm from "@/components/goals/EditGoalForm";
+import DeleteGoalDialog from "@/components/goals/DeleteGoalDialog";
 
 async function fetchGoals(): Promise<Goal[]> {
   const tokenRes = await authClient.token?.();
@@ -29,20 +29,6 @@ async function fetchGoals(): Promise<Goal[]> {
   const data = await res.json();
   if (!res.ok || !data.success) throw new Error(data.message || "Failed to load goals");
   return data.data;
-}
-
-async function deleteGoal(id: string) {
-  const tokenRes = await authClient.token?.();
-  const token = tokenRes?.data?.token;
-
-  const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/my/${id}`, {
-    method: "DELETE",
-    headers: { Authorization: `Bearer ${token}` },
-  });
-
-  const data = await res.json();
-  if (!res.ok || !data.success) throw new Error(data.message || "Failed to delete goal");
-  return data;
 }
 
 const priorityStyles: Record<Goal["priority"], string> = {
@@ -63,8 +49,6 @@ function GoalCardSkeleton() {
 }
 
 export default function ManageGoalsPage() {
-  const queryClient = useQueryClient();
-  const [deleteTarget, setDeleteTarget] = useState<Goal | null>(null);
   const [editTarget, setEditTarget] = useState<Goal | null>(null);
 
   const {
@@ -75,14 +59,6 @@ export default function ManageGoalsPage() {
   } = useQuery({
     queryKey: ["goals"],
     queryFn: fetchGoals,
-  });
-
-  const deleteMutation = useMutation({
-    mutationFn: deleteGoal,
-    onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ["goals"] });
-      setDeleteTarget(null);
-    },
   });
 
   return (
@@ -189,13 +165,9 @@ export default function ManageGoalsPage() {
                   <FiEdit2 className="h-3.5 w-3.5" />
                   Edit
                 </button>
-                <button
-                  onClick={() => setDeleteTarget(goal)}
-                  className="flex min-h-[38px] flex-1 items-center justify-center gap-1.5 rounded-lg border border-red-100 text-xs font-medium text-red-600 active:bg-red-50 sm:hover:bg-red-50"
-                >
-                  <FiTrash2 className="h-3.5 w-3.5" />
-                  Delete
-                </button>
+
+                {/* Delete - goal ei scope-e ache, tai eikhane thakbe */}
+                <DeleteGoalDialog goalId={goal._id} goalTitle={goal.title} />
               </div>
             </div>
           ))}
@@ -220,41 +192,6 @@ export default function ManageGoalsPage() {
               onSuccess={() => setEditTarget(null)}
               onCancel={() => setEditTarget(null)}
             />
-          </div>
-        </div>
-      )}
-
-      {/* Delete confirm modal */}
-      {deleteTarget && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 p-4">
-          <div className="w-full max-w-sm rounded-2xl bg-white p-5 shadow-xl sm:p-6">
-            <h3 className="mb-2 text-base font-bold text-gray-900">Delete Goal?</h3>
-            <p className="mb-5 text-sm text-gray-500">
-              Are you sure you want to delete "{deleteTarget.title}"? This cannot be undone.
-            </p>
-
-            {deleteMutation.isError && (
-              <div className="mb-4 flex items-start gap-2 rounded-lg bg-red-50 px-3 py-2 text-xs text-red-600">
-                <FiAlertCircle className="mt-0.5 h-3.5 w-3.5 shrink-0" />
-                <span>{(deleteMutation.error as Error).message}</span>
-              </div>
-            )}
-
-            <div className="flex gap-3">
-              <button
-                onClick={() => setDeleteTarget(null)}
-                className="min-h-[42px] flex-1 rounded-lg border border-gray-200 text-sm font-medium text-gray-700 active:bg-gray-50 sm:hover:bg-gray-50"
-              >
-                Cancel
-              </button>
-              <button
-                onClick={() => deleteMutation.mutate(deleteTarget._id)}
-                disabled={deleteMutation.isPending}
-                className="min-h-[42px] flex-1 rounded-lg bg-red-600 text-sm font-semibold text-white active:bg-red-700 disabled:opacity-60 sm:hover:bg-red-700"
-              >
-                {deleteMutation.isPending ? "Deleting..." : "Delete"}
-              </button>
-            </div>
           </div>
         </div>
       )}
