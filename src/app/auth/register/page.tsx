@@ -5,7 +5,7 @@ import { useState } from "react";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
 import { FcGoogle } from "react-icons/fc";
-import { FiGithub, FiUser, FiMail, FiLock, FiEye, FiEyeOff, FiAlertCircle } from "react-icons/fi";
+import { FiUser, FiMail, FiLock, FiEye, FiEyeOff, FiAlertCircle } from "react-icons/fi";
 import { authClient } from "@/lib/auth-client"; // adjust path to match your project
 
 export default function RegisterPage() {
@@ -20,7 +20,7 @@ export default function RegisterPage() {
   const [errors, setErrors] = useState<{ [key: string]: string }>({});
   const [serverError, setServerError] = useState("");
   const [loading, setLoading] = useState(false);
-  const [socialLoading, setSocialLoading] = useState<"google" | "github" | null>(null);
+  const [socialLoading, setSocialLoading] = useState<"google" | null>(null);
 
   const validate = () => {
     const newErrors: { [key: string]: string } = {};
@@ -53,33 +53,36 @@ export default function RegisterPage() {
 
     setLoading(true);
     try {
-      const { error } = await authClient.signUp.email({
+      // Better Auth email/password signup
+      const { data, error } = await authClient.signUp.email({
         name: fullName,
-        email,
-        password,
-        callbackURL: "/dashboard",
+        email: email.trim(),
+        password: password,
+        callbackURL: "/auth/login",
       });
 
       if (error) {
-        setServerError(error.message || "Something went wrong. Please try again.");
+        // Better Auth এর আসল এরর মেসেজটি দেখানোর জন্য
+        setServerError(error.message || "Registration failed. Please try again.");
         return;
       }
 
-      router.push("/dashboard");
-    } catch (err) {
-      setServerError("Something went wrong. Please try again.");
+      // সফল হলে ড্যাশবোর্ডে রিডাইরেক্ট হবে
+      router.push("/auth/login");
+    } catch (err: any) {
+      setServerError(err?.message || "Something went wrong. Please try again.");
     } finally {
       setLoading(false);
     }
   };
 
-  const handleSocialSignup = async (provider: "google" | "github") => {
+  const handleSocialSignup = async (provider: "google") => {
     setServerError("");
     setSocialLoading(provider);
     try {
       await authClient.signIn.social({
         provider,
-        callbackURL: "/dashboard",
+        callbackURL: "/dashboard", // সোশ্যাল সাইনআপের পরও ড্যাশবোর্ডে যাওয়াই ভালো
       });
     } catch (err) {
       setServerError("Social signup failed. Please try again.");
@@ -118,19 +121,10 @@ export default function RegisterPage() {
             type="button"
             onClick={() => handleSocialSignup("google")}
             disabled={socialLoading !== null}
-            className="flex w-full items-center justify-center gap-2 rounded-lg border border-gray-200 py-2.5 text-sm font-medium text-gray-700 transition-colors hover:bg-gray-50 disabled:opacity-60"
+            className="flex w-full items-center justify-center gap-2 rounded-lg border border-gray-200 py-2.5 text-sm font-semibold text-gray-800 transition-colors hover:bg-gray-50 disabled:opacity-60"
           >
             <FcGoogle className="h-5 w-5" />
             {socialLoading === "google" ? "Connecting..." : "Continue with Google"}
-          </button>
-          <button
-            type="button"
-            onClick={() => handleSocialSignup("github")}
-            disabled={socialLoading !== null}
-            className="flex w-full items-center justify-center gap-2 rounded-lg border border-gray-200 py-2.5 text-sm font-medium text-gray-700 transition-colors hover:bg-gray-50 disabled:opacity-60"
-          >
-            <FiGithub className="h-5 w-5" />
-            {socialLoading === "github" ? "Connecting..." : "Continue with GitHub"}
           </button>
         </div>
 
@@ -145,16 +139,16 @@ export default function RegisterPage() {
         <form onSubmit={handleSubmit} className="flex flex-col gap-4" noValidate>
           {/* Full Name */}
           <div>
-            <label className="mb-1.5 block text-sm font-medium text-gray-700">Full Name</label>
+            <label className="mb-1.5 block text-sm font-semibold text-gray-800">Full Name</label>
             <div className="relative">
-              <FiUser className="pointer-events-none absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-gray-400" />
+              <FiUser className="pointer-events-none absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-gray-500" />
               <input
                 type="text"
                 value={fullName}
                 onChange={(e) => setFullName(e.target.value)}
-                placeholder="Rafi Hasan"
-                className={`w-full rounded-lg border py-2.5 pl-10 pr-3 text-sm outline-none transition-colors focus:border-blue-500 focus:ring-1 focus:ring-blue-500 ${
-                  errors.fullName ? "border-red-400" : "border-gray-200"
+                placeholder="Username"
+                className={`w-full rounded-lg border py-2.5 pl-10 pr-3 text-sm font-medium text-gray-900 placeholder-gray-400 outline-none transition-colors focus:border-blue-500 focus:ring-1 focus:ring-blue-500 ${
+                  errors.fullName ? "border-red-400 bg-red-50/30" : "border-gray-200 bg-white"
                 }`}
               />
             </div>
@@ -163,16 +157,16 @@ export default function RegisterPage() {
 
           {/* Email */}
           <div>
-            <label className="mb-1.5 block text-sm font-medium text-gray-700">Email</label>
+            <label className="mb-1.5 block text-sm font-semibold text-gray-800">Email</label>
             <div className="relative">
-              <FiMail className="pointer-events-none absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-gray-400" />
+              <FiMail className="pointer-events-none absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-gray-500" />
               <input
                 type="email"
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
                 placeholder="example@gmail.com"
-                className={`w-full rounded-lg border py-2.5 pl-10 pr-3 text-sm outline-none transition-colors focus:border-blue-500 focus:ring-1 focus:ring-blue-500 ${
-                  errors.email ? "border-red-400" : "border-gray-200"
+                className={`w-full rounded-lg border py-2.5 pl-10 pr-3 text-sm font-medium text-gray-900 placeholder-gray-400 outline-none transition-colors focus:border-blue-500 focus:ring-1 focus:ring-blue-500 ${
+                  errors.email ? "border-red-400 bg-red-50/30" : "border-gray-200 bg-white"
                 }`}
               />
             </div>
@@ -181,22 +175,22 @@ export default function RegisterPage() {
 
           {/* Password */}
           <div>
-            <label className="mb-1.5 block text-sm font-medium text-gray-700">Password</label>
+            <label className="mb-1.5 block text-sm font-semibold text-gray-800">Password</label>
             <div className="relative">
-              <FiLock className="pointer-events-none absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-gray-400" />
+              <FiLock className="pointer-events-none absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-gray-500" />
               <input
                 type={showPassword ? "text" : "password"}
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
                 placeholder="••••••••"
-                className={`w-full rounded-lg border py-2.5 pl-10 pr-10 text-sm outline-none transition-colors focus:border-blue-500 focus:ring-1 focus:ring-blue-500 ${
-                  errors.password ? "border-red-400" : "border-gray-200"
+                className={`w-full rounded-lg border py-2.5 pl-10 pr-10 text-sm font-medium text-gray-900 placeholder-gray-400 outline-none transition-colors focus:border-blue-500 focus:ring-1 focus:ring-blue-500 ${
+                  errors.password ? "border-red-400 bg-red-50/30" : "border-gray-200 bg-white"
                 }`}
               />
               <button
                 type="button"
                 onClick={() => setShowPassword((v) => !v)}
-                className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-600"
+                className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-500 hover:text-gray-700"
               >
                 {showPassword ? <FiEyeOff className="h-4 w-4" /> : <FiEye className="h-4 w-4" />}
               </button>
@@ -206,7 +200,7 @@ export default function RegisterPage() {
 
           {/* Terms */}
           <div>
-            <label className="flex items-start gap-2 text-sm text-gray-600">
+            <label className="flex items-start gap-2 text-sm font-medium text-gray-700">
               <input
                 type="checkbox"
                 checked={agreeTerms}
@@ -215,7 +209,7 @@ export default function RegisterPage() {
               />
               <span>
                 I agree to the{" "}
-                <Link href="/terms" className="text-blue-600 hover:underline">
+                <Link href="/terms" className="font-semibold text-blue-600 hover:underline">
                   Terms & Conditions
                 </Link>
               </span>
@@ -234,7 +228,7 @@ export default function RegisterPage() {
 
         <p className="mt-6 text-center text-sm text-gray-500">
           Already have an account?{" "}
-          <Link href="/login" className="font-medium text-blue-600 hover:underline">
+          <Link href="/auth/login" className="font-semibold text-blue-600 hover:underline">
             Login
           </Link>
         </p>
