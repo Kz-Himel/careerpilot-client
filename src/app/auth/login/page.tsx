@@ -5,7 +5,7 @@ import { useState } from "react";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
 import { FcGoogle } from "react-icons/fc";
-import { FiGithub, FiMail, FiLock, FiEye, FiEyeOff, FiAlertCircle, FiZap } from "react-icons/fi";
+import { FiMail, FiLock, FiEye, FiEyeOff, FiAlertCircle, FiZap } from "react-icons/fi";
 import { authClient } from "@/lib/auth-client"; // adjust path to match your project
 
 const DEMO_EMAIL = "careerpilot@gmail.com";
@@ -23,7 +23,7 @@ export default function LoginPage() {
   const [serverError, setServerError] = useState("");
   const [loading, setLoading] = useState(false);
   const [demoLoading, setDemoLoading] = useState(false);
-  const [socialLoading, setSocialLoading] = useState<"google" | "github" | null>(null);
+  const [socialLoading, setSocialLoading] = useState<"google" | null>(null);
 
   const validate = () => {
     const newErrors: { [key: string]: string } = {};
@@ -82,13 +82,13 @@ export default function LoginPage() {
     }
   };
 
-  const handleSocialLogin = async (provider: "google" | "github") => {
+  const handleSocialLogin = async (provider: "google") => {
     setServerError("");
     setSocialLoading(provider);
     try {
       await authClient.signIn.social({ provider, callbackURL: "/dashboard" });
-    } catch (err) {
-      setServerError("Social login failed. Please try again.");
+    } catch (err: any) {
+      setServerError(err?.message || "Social login failed. Please try again.");
       setSocialLoading(null);
     }
   };
@@ -122,13 +122,23 @@ export default function LoginPage() {
         <button
           type="button"
           onClick={handleDemoLogin}
-          disabled={demoLoading || loading}
-          className="mb-4 flex min-h-[44px] w-full items-center justify-center gap-2 rounded-lg border border-blue-200 bg-blue-50 py-2.5 text-sm font-semibold text-blue-700 transition-colors active:bg-blue-100 disabled:opacity-60 sm:hover:bg-blue-100"
+          disabled={demoLoading || loading || socialLoading !== null}
+          className="mb-4 flex min-h-[44px] w-full items-center justify-center gap-2 rounded-lg border border-blue-200 bg-blue-50 py-2.5 text-sm font-semibold text-blue-700 transition-colors active:bg-blue-100 disabled:cursor-not-allowed disabled:opacity-60 sm:hover:bg-blue-100"
         >
-          <FiZap className="h-4 w-4 shrink-0" />
-          <span className="truncate">
-            {demoLoading ? "Logging in with demo account..." : "Try Demo Login"}
-          </span>
+          {demoLoading ? (
+            <>
+              <svg className="h-4 w-4 animate-spin text-blue-700" fill="none" viewBox="0 0 24 24">
+                <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" />
+                <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z" />
+              </svg>
+              <span>Logging in with demo account...</span>
+            </>
+          ) : (
+            <>
+              <FiZap className="h-4 w-4 shrink-0" />
+              <span>Try Demo Login</span>
+            </>
+          )}
         </button>
 
         {/* Social login */}
@@ -136,25 +146,24 @@ export default function LoginPage() {
           <button
             type="button"
             onClick={() => handleSocialLogin("google")}
-            disabled={socialLoading !== null}
-            className="flex min-h-[44px] w-full items-center justify-center gap-2 rounded-lg border border-gray-200 py-2.5 text-sm font-semibold text-gray-800 transition-colors active:bg-gray-50 disabled:opacity-60 sm:hover:bg-gray-50"
+            disabled={socialLoading !== null || loading || demoLoading}
+            className="flex min-h-[44px] w-full items-center justify-center gap-2 rounded-lg border border-gray-200 py-2.5 text-sm font-semibold text-gray-800 transition-colors active:bg-gray-50 disabled:cursor-not-allowed disabled:opacity-60 sm:hover:bg-gray-50"
           >
-            <FcGoogle className="h-5 w-5 shrink-0" />
-            <span className="truncate">
-              {socialLoading === "google" ? "Connecting..." : "Continue with Google"}
-            </span>
+            {socialLoading === "google" ? (
+              <>
+                <svg className="h-5 w-5 animate-spin text-gray-500" fill="none" viewBox="0 0 24 24">
+                  <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" />
+                  <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z" />
+                </svg>
+                <span>Connecting...</span>
+              </>
+            ) : (
+              <>
+                <FcGoogle className="h-5 w-5 shrink-0" />
+                <span>Continue with Google</span>
+              </>
+            )}
           </button>
-          {/* <button
-            type="button"
-            onClick={() => handleSocialLogin("github")}
-            disabled={socialLoading !== null}
-            className="flex min-h-[44px] w-full items-center justify-center gap-2 rounded-lg border border-gray-200 py-2.5 text-sm font-semibold text-gray-800 transition-colors active:bg-gray-50 disabled:opacity-60 sm:hover:bg-gray-50"
-          >
-            <FiGithub className="h-5 w-5 shrink-0" />
-            <span className="truncate">
-              {socialLoading === "github" ? "Connecting..." : "Continue with GitHub"}
-            </span>
-          </button> */}
         </div>
 
         {/* Divider */}
@@ -174,11 +183,12 @@ export default function LoginPage() {
               <input
                 type="email"
                 inputMode="email"
-                autoComplete="email"
+                autoComplete="username" /* ব্রাউজারকে নির্দেশ দেয় এটি মেইন আইডি/ইমেইল লগইন ফিল্ড, যাতে ফুল নেম অটোফিল না হয় */
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
                 placeholder="example@gmail.com"
-                className={`min-h-[44px] w-full rounded-lg border py-2.5 pl-10 pr-3 text-sm font-medium text-gray-900 placeholder-gray-400 outline-none transition-colors focus:border-blue-500 focus:ring-1 focus:ring-blue-500 ${
+                disabled={loading || demoLoading || socialLoading !== null}
+                className={`min-h-[44px] w-full rounded-lg border py-2.5 ltr pl-10 pr-3 text-sm font-medium text-gray-900 placeholder-gray-400 outline-none transition-colors focus:border-blue-500 focus:ring-1 focus:ring-blue-500 disabled:bg-gray-50 ${
                   errors.email ? "border-red-400 bg-red-50/30" : "border-gray-200 bg-white"
                 }`}
               />
@@ -202,14 +212,16 @@ export default function LoginPage() {
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
                 placeholder="••••••••"
-                className={`min-h-[44px] w-full rounded-lg border py-2.5 pl-10 pr-10 text-sm font-medium text-gray-900 placeholder-gray-400 outline-none transition-colors focus:border-blue-500 focus:ring-1 focus:ring-blue-500 ${
+                disabled={loading || demoLoading || socialLoading !== null}
+                className={`min-h-[44px] w-full rounded-lg border py-2.5 pl-10 pr-10 text-sm font-medium text-gray-900 placeholder-gray-400 outline-none transition-colors focus:border-blue-500 focus:ring-1 focus:ring-blue-500 disabled:bg-gray-50 ${
                   errors.password ? "border-red-400 bg-red-50/30" : "border-gray-200 bg-white"
                 }`}
               />
               <button
                 type="button"
                 onClick={() => setShowPassword((v) => !v)}
-                className="absolute right-3 top-1/2 flex h-6 w-6 -translate-y-1/2 items-center justify-center text-gray-500 hover:text-gray-700"
+                disabled={loading || demoLoading || socialLoading !== null}
+                className="absolute right-3 top-1/2 flex h-6 w-6 -translate-y-1/2 items-center justify-center text-gray-500 hover:text-gray-700 disabled:opacity-50"
                 aria-label="Toggle password visibility"
               >
                 {showPassword ? <FiEyeOff className="h-4 w-4" /> : <FiEye className="h-4 w-4" />}
@@ -224,17 +236,28 @@ export default function LoginPage() {
               type="checkbox"
               checked={rememberMe}
               onChange={(e) => setRememberMe(e.target.checked)}
-              className="h-4 w-4 shrink-0 rounded border-gray-300 text-blue-600 focus:ring-blue-500"
+              disabled={loading || demoLoading || socialLoading !== null}
+              className="h-4 w-4 shrink-0 rounded border-gray-300 text-blue-600 focus:ring-blue-500 disabled:opacity-50"
             />
             Remember me
           </label>
 
           <button
             type="submit"
-            disabled={loading || demoLoading}
-            className="mt-1 min-h-[46px] w-full rounded-lg bg-blue-600 text-sm font-semibold text-white transition-colors active:bg-blue-700 disabled:opacity-60 sm:hover:bg-blue-700"
+            disabled={loading || demoLoading || socialLoading !== null}
+            className="mt-1 flex min-h-[46px] w-full items-center justify-center gap-2 rounded-lg bg-blue-600 text-sm font-semibold text-white transition-colors active:bg-blue-700 disabled:cursor-not-allowed disabled:opacity-60 sm:hover:bg-blue-700"
           >
-            {loading ? "Logging in..." : "Login"}
+            {loading ? (
+              <>
+                <svg className="h-5 w-5 animate-spin text-white" fill="none" viewBox="0 0 24 24">
+                  <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" />
+                  <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z" />
+                </svg>
+                <span>Logging in...</span>
+              </>
+            ) : (
+              "Login"
+            )}
           </button>
         </form>
 

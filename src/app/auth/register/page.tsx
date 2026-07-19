@@ -55,19 +55,17 @@ export default function RegisterPage() {
     try {
       // Better Auth email/password signup
       const { data, error } = await authClient.signUp.email({
-        name: fullName,
+        name: fullName.trim(), // Full name এখানে name হিসেবে যাচ্ছে
         email: email.trim(),
         password: password,
         callbackURL: "/auth/login",
       });
 
       if (error) {
-        // Better Auth এর আসল এরর মেসেজটি দেখানোর জন্য
         setServerError(error.message || "Registration failed. Please try again.");
         return;
       }
 
-      // সফল হলে ড্যাশবোর্ডে রিডাইরেক্ট হবে
       router.push("/auth/login");
     } catch (err: any) {
       setServerError(err?.message || "Something went wrong. Please try again.");
@@ -82,10 +80,10 @@ export default function RegisterPage() {
     try {
       await authClient.signIn.social({
         provider,
-        callbackURL: "/dashboard", // সোশ্যাল সাইনআপের পরও ড্যাশবোর্ডে যাওয়াই ভালো
+        callbackURL: "/dashboard",
       });
-    } catch (err) {
-      setServerError("Social signup failed. Please try again.");
+    } catch (err: any) {
+      setServerError(err?.message || "Social signup failed. Please try again.");
       setSocialLoading(null);
     }
   };
@@ -120,11 +118,23 @@ export default function RegisterPage() {
           <button
             type="button"
             onClick={() => handleSocialSignup("google")}
-            disabled={socialLoading !== null}
-            className="flex w-full items-center justify-center gap-2 rounded-lg border border-gray-200 py-2.5 text-sm font-semibold text-gray-800 transition-colors hover:bg-gray-50 disabled:opacity-60"
+            disabled={socialLoading !== null || loading}
+            className="flex w-full items-center justify-center gap-2 rounded-lg border border-gray-200 py-2.5 text-sm font-semibold text-gray-800 transition-colors hover:bg-gray-50 disabled:cursor-not-allowed disabled:opacity-60"
           >
-            <FcGoogle className="h-5 w-5" />
-            {socialLoading === "google" ? "Connecting..." : "Continue with Google"}
+            {socialLoading === "google" ? (
+              <>
+                <svg className="h-5 w-5 animate-spin text-gray-500" fill="none" viewBox="0 0 24 24">
+                  <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" />
+                  <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z" />
+                </svg>
+                <span>Connecting...</span>
+              </>
+            ) : (
+              <>
+                <FcGoogle className="h-5 w-5" />
+                <span>Continue with Google</span>
+              </>
+            )}
           </button>
         </div>
 
@@ -146,8 +156,9 @@ export default function RegisterPage() {
                 type="text"
                 value={fullName}
                 onChange={(e) => setFullName(e.target.value)}
-                placeholder="Username"
-                className={`w-full rounded-lg border py-2.5 pl-10 pr-3 text-sm font-medium text-gray-900 placeholder-gray-400 outline-none transition-colors focus:border-blue-500 focus:ring-1 focus:ring-blue-500 ${
+                placeholder="John Doe" /* এখানে আগে Username ছিল, এখন ঠিক করা হয়েছে */
+                disabled={loading || socialLoading !== null}
+                className={`w-full rounded-lg border py-2.5 pl-10 pr-3 text-sm font-medium text-gray-900 placeholder-gray-400 outline-none transition-colors focus:border-blue-500 focus:ring-1 focus:ring-blue-500 disabled:bg-gray-50 ${
                   errors.fullName ? "border-red-400 bg-red-50/30" : "border-gray-200 bg-white"
                 }`}
               />
@@ -165,7 +176,8 @@ export default function RegisterPage() {
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
                 placeholder="example@gmail.com"
-                className={`w-full rounded-lg border py-2.5 pl-10 pr-3 text-sm font-medium text-gray-900 placeholder-gray-400 outline-none transition-colors focus:border-blue-500 focus:ring-1 focus:ring-blue-500 ${
+                disabled={loading || socialLoading !== null}
+                className={`w-full rounded-lg border py-2.5 pl-10 pr-3 text-sm font-medium text-gray-900 placeholder-gray-400 outline-none transition-colors focus:border-blue-500 focus:ring-1 focus:ring-blue-500 disabled:bg-gray-50 ${
                   errors.email ? "border-red-400 bg-red-50/30" : "border-gray-200 bg-white"
                 }`}
               />
@@ -183,14 +195,16 @@ export default function RegisterPage() {
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
                 placeholder="••••••••"
-                className={`w-full rounded-lg border py-2.5 pl-10 pr-10 text-sm font-medium text-gray-900 placeholder-gray-400 outline-none transition-colors focus:border-blue-500 focus:ring-1 focus:ring-blue-500 ${
+                disabled={loading || socialLoading !== null}
+                className={`w-full rounded-lg border py-2.5 pl-10 pr-10 text-sm font-medium text-gray-900 placeholder-gray-400 outline-none transition-colors focus:border-blue-500 focus:ring-1 focus:ring-blue-500 disabled:bg-gray-50 ${
                   errors.password ? "border-red-400 bg-red-50/30" : "border-gray-200 bg-white"
                 }`}
               />
               <button
                 type="button"
                 onClick={() => setShowPassword((v) => !v)}
-                className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-500 hover:text-gray-700"
+                disabled={loading || socialLoading !== null}
+                className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-500 hover:text-gray-700 disabled:opacity-50"
               >
                 {showPassword ? <FiEyeOff className="h-4 w-4" /> : <FiEye className="h-4 w-4" />}
               </button>
@@ -205,7 +219,8 @@ export default function RegisterPage() {
                 type="checkbox"
                 checked={agreeTerms}
                 onChange={(e) => setAgreeTerms(e.target.checked)}
-                className="mt-0.5 h-4 w-4 rounded border-gray-300 text-blue-600 focus:ring-blue-500"
+                disabled={loading || socialLoading !== null}
+                className="mt-0.5 h-4 w-4 rounded border-gray-300 text-blue-600 focus:ring-blue-500 disabled:opacity-50"
               />
               <span>
                 I agree to the{" "}
@@ -219,10 +234,20 @@ export default function RegisterPage() {
 
           <button
             type="submit"
-            disabled={loading}
-            className="mt-1 w-full rounded-lg bg-blue-600 py-2.5 text-sm font-semibold text-white transition-colors hover:bg-blue-700 disabled:opacity-60"
+            disabled={loading || socialLoading !== null}
+            className="mt-1 flex w-full items-center justify-center gap-2 rounded-lg bg-blue-600 py-2.5 text-sm font-semibold text-white transition-colors hover:bg-blue-700 disabled:cursor-not-allowed disabled:opacity-60"
           >
-            {loading ? "Creating account..." : "Sign Up"}
+            {loading ? (
+              <>
+                <svg className="h-5 w-5 animate-spin text-white" fill="none" viewBox="0 0 24 24">
+                  <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" />
+                  <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z" />
+                </svg>
+                <span>Creating account...</span>
+              </>
+            ) : (
+              "Sign Up"
+            )}
           </button>
         </form>
 
