@@ -38,7 +38,8 @@ export default function PopularCategories() {
           </p>
         </motion.div>
 
-        <div className="grid grid-cols-2 gap-3 sm:gap-4 lg:grid-cols-3">
+        {/* এখানে গ্রিড কলামের অর্ডার ঠিক করা হয়েছে */}
+        <div className="grid grid-cols-1 gap-3 sm:grid-cols-2 sm:gap-4 lg:grid-cols-3">
           {categories.map((cat, i) => {
             const Icon = cat.icon;
             return (
@@ -49,6 +50,7 @@ export default function PopularCategories() {
                 viewport={{ once: true }}
                 transition={{ duration: 0.4, delay: i * 0.08 }}
                 whileHover={{ scale: 1.02 }}
+                whileTap={{ scale: 0.98 }}
               >
                 <Link
                   href={`/explore?category=${encodeURIComponent(cat.title)}`}
