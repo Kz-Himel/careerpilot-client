@@ -77,7 +77,7 @@ export default function AddGoalPage() {
       
       setTimeout(() => {
         setShowSuccess(false);
-        router.push("/explore"); 
+        router.push("/dashboard/manage-goals"); 
       }, 2000);
     },
   });
