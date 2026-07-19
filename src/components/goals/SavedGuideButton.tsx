@@ -1,4 +1,3 @@
-// components/goals/SaveGuideButton.tsx
 "use client";
 
 import { useState } from "react";
@@ -63,13 +62,13 @@ export default function SaveGuideButton({ goalId }: SaveGuideButtonProps) {
     <button
       onClick={handleClick}
       disabled={mutation.isPending}
-      className={`flex min-h-[44px] items-center justify-center gap-2 rounded-lg border px-5 text-sm font-semibold transition-colors disabled:opacity-60 ${
+      className={`btn btn-md rounded-xl ${
         isSaved
-          ? "border-blue-200 bg-blue-50 text-blue-700"
-          : "border-gray-200 text-gray-700 active:bg-gray-50 sm:hover:bg-gray-50"
+          ? "border border-indigo-200 bg-indigo-50 text-indigo-700"
+          : "btn-secondary"
       }`}
     >
-      <FiBookmark className={`h-4 w-4 ${isSaved ? "fill-blue-600" : ""}`} />
+      <FiBookmark className={`h-4 w-4 ${isSaved ? "fill-indigo-600" : ""}`} />
       {mutation.isPending ? "Saving..." : isSaved ? "Saved" : "Save Guide"}
     </button>
   );

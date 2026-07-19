@@ -1,4 +1,3 @@
-// app/login/page.tsx
 "use client";
 
 import { useState } from "react";
@@ -6,7 +5,7 @@ import { useRouter } from "next/navigation";
 import Link from "next/link";
 import { FcGoogle } from "react-icons/fc";
 import { FiMail, FiLock, FiEye, FiEyeOff, FiAlertCircle, FiZap } from "react-icons/fi";
-import { authClient } from "@/lib/auth-client"; // adjust path to match your project
+import { authClient } from "@/lib/auth-client";
 
 const DEMO_EMAIL = "careerpilot@gmail.com";
 const DEMO_PASSWORD = "Careerpilot@1234";
@@ -59,7 +58,7 @@ export default function LoginPage() {
     try {
       const success = await signInWithCredentials(email, password);
       if (success) router.push("/dashboard");
-    } catch (err) {
+    } catch {
       setServerError("Something went wrong. Please try again.");
     } finally {
       setLoading(false);
@@ -75,7 +74,7 @@ export default function LoginPage() {
     try {
       const success = await signInWithCredentials(DEMO_EMAIL, DEMO_PASSWORD);
       if (success) router.push("/dashboard");
-    } catch (err) {
+    } catch {
       setServerError("Demo login failed. Please try again.");
     } finally {
       setDemoLoading(false);
@@ -87,32 +86,38 @@ export default function LoginPage() {
     setSocialLoading(provider);
     try {
       await authClient.signIn.social({ provider, callbackURL: "/dashboard" });
-    } catch (err: any) {
-      setServerError(err?.message || "Social login failed. Please try again.");
+    } catch (err: unknown) {
+      const message = err instanceof Error ? err.message : "Social login failed. Please try again.";
+      setServerError(message);
       setSocialLoading(null);
     }
   };
 
+  const isDisabled = loading || demoLoading || socialLoading !== null;
+
   return (
-    <div className="flex min-h-[100dvh] items-center justify-center bg-gray-50 px-4 py-8 sm:px-6 sm:py-12">
-      <div className="w-full max-w-[420px] rounded-2xl border border-gray-100 bg-white p-6 shadow-sm sm:max-w-md sm:p-8 sm:shadow-md">
+    <div className="mesh-gradient flex min-h-[calc(100dvh-4rem)] items-center justify-center px-4 py-10 sm:px-6 sm:py-14">
+      <div className="card w-full max-w-[440px] p-7 shadow-lg sm:p-9">
         {/* Logo */}
-        <Link href="/" className="mb-5 flex items-center justify-center gap-2 sm:mb-6">
-          <span className="flex h-7 w-7 shrink-0 items-center justify-center rounded-lg bg-blue-600 text-xs font-bold text-white sm:h-8 sm:w-8 sm:text-sm">
+        <Link href="/" className="mb-6 flex items-center justify-center gap-2.5">
+          <span className="flex h-9 w-9 items-center justify-center rounded-xl bg-gradient-to-br from-indigo-600 to-violet-600 text-sm font-bold text-white">
             C
           </span>
-          <span className="text-base font-bold text-gray-900 sm:text-lg">
-            CareerPilot <span className="text-blue-600">AI</span>
+          <span className="text-lg font-bold text-slate-900">
+            CareerPilot{" "}
+            <span className="bg-gradient-to-r from-indigo-600 to-violet-600 bg-clip-text text-transparent">
+              AI
+            </span>
           </span>
         </Link>
 
-        <div className="mb-5 text-center sm:mb-6">
-          <h1 className="text-xl font-bold text-gray-900 sm:text-2xl">Welcome Back!</h1>
-          <p className="mt-1 text-sm text-gray-500">Login to continue your journey.</p>
+        <div className="mb-6 text-center">
+          <h1 className="heading-page text-xl sm:text-2xl">Welcome Back!</h1>
+          <p className="mt-1.5 text-sm text-slate-500">Login to continue your journey.</p>
         </div>
 
         {serverError && (
-          <div className="mb-4 flex items-start gap-2 rounded-lg bg-red-50 px-3 py-2.5 text-xs text-red-600 sm:text-sm">
+          <div className="alert alert-error mb-5">
             <FiAlertCircle className="mt-0.5 h-4 w-4 shrink-0" />
             <span>{serverError}</span>
           </div>
@@ -122,12 +127,12 @@ export default function LoginPage() {
         <button
           type="button"
           onClick={handleDemoLogin}
-          disabled={demoLoading || loading || socialLoading !== null}
-          className="mb-4 flex min-h-[44px] w-full items-center justify-center gap-2 rounded-lg border border-blue-200 bg-blue-50 py-2.5 text-sm font-semibold text-blue-700 transition-colors active:bg-blue-100 disabled:cursor-not-allowed disabled:opacity-60 sm:hover:bg-blue-100"
+          disabled={isDisabled}
+          className="btn btn-md mb-4 w-full rounded-xl border border-indigo-200 bg-indigo-50 text-indigo-700 hover:bg-indigo-100"
         >
           {demoLoading ? (
             <>
-              <svg className="h-4 w-4 animate-spin text-blue-700" fill="none" viewBox="0 0 24 24">
+              <svg className="h-4 w-4 animate-spin" fill="none" viewBox="0 0 24 24">
                 <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" />
                 <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z" />
               </svg>
@@ -142,110 +147,101 @@ export default function LoginPage() {
         </button>
 
         {/* Social login */}
-        <div className="flex flex-col gap-2.5 sm:gap-3">
-          <button
-            type="button"
-            onClick={() => handleSocialLogin("google")}
-            disabled={socialLoading !== null || loading || demoLoading}
-            className="flex min-h-[44px] w-full items-center justify-center gap-2 rounded-lg border border-gray-200 py-2.5 text-sm font-semibold text-gray-800 transition-colors active:bg-gray-50 disabled:cursor-not-allowed disabled:opacity-60 sm:hover:bg-gray-50"
-          >
-            {socialLoading === "google" ? (
-              <>
-                <svg className="h-5 w-5 animate-spin text-gray-500" fill="none" viewBox="0 0 24 24">
-                  <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" />
-                  <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z" />
-                </svg>
-                <span>Connecting...</span>
-              </>
-            ) : (
-              <>
-                <FcGoogle className="h-5 w-5 shrink-0" />
-                <span>Continue with Google</span>
-              </>
-            )}
-          </button>
-        </div>
+        <button
+          type="button"
+          onClick={() => handleSocialLogin("google")}
+          disabled={isDisabled}
+          className="btn btn-secondary btn-md w-full rounded-xl"
+        >
+          {socialLoading === "google" ? (
+            <>
+              <svg className="h-5 w-5 animate-spin text-slate-500" fill="none" viewBox="0 0 24 24">
+                <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" />
+                <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z" />
+              </svg>
+              <span>Connecting...</span>
+            </>
+          ) : (
+            <>
+              <FcGoogle className="h-5 w-5 shrink-0" />
+              <span>Continue with Google</span>
+            </>
+          )}
+        </button>
 
         {/* Divider */}
-        <div className="my-5 flex items-center gap-3 sm:my-6">
-          <div className="h-px flex-1 bg-gray-200" />
-          <span className="text-xs font-medium text-gray-400">or</span>
-          <div className="h-px flex-1 bg-gray-200" />
+        <div className="my-6 flex items-center gap-3">
+          <div className="h-px flex-1 bg-slate-200" />
+          <span className="text-xs font-medium text-slate-400">or</span>
+          <div className="h-px flex-1 bg-slate-200" />
         </div>
 
         {/* Form */}
         <form onSubmit={handleSubmit} className="flex flex-col gap-4" noValidate>
-          {/* Email */}
           <div>
-            <label className="mb-1.5 block text-sm font-semibold text-gray-800">Email</label>
+            <label className="form-label">Email</label>
             <div className="relative">
-              <FiMail className="pointer-events-none absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-gray-500" />
+              <FiMail className="pointer-events-none absolute left-3.5 top-1/2 h-4 w-4 -translate-y-1/2 text-slate-400" />
               <input
                 type="email"
                 inputMode="email"
-                autoComplete="username" /* ব্রাউজারকে নির্দেশ দেয় এটি মেইন আইডি/ইমেইল লগইন ফিল্ড, যাতে ফুল নেম অটোফিল না হয় */
+                autoComplete="username"
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
                 placeholder="example@gmail.com"
-                disabled={loading || demoLoading || socialLoading !== null}
-                className={`min-h-[44px] w-full rounded-lg border py-2.5 ltr pl-10 pr-3 text-sm font-medium text-gray-900 placeholder-gray-400 outline-none transition-colors focus:border-blue-500 focus:ring-1 focus:ring-blue-500 disabled:bg-gray-50 ${
-                  errors.email ? "border-red-400 bg-red-50/30" : "border-gray-200 bg-white"
-                }`}
+                disabled={isDisabled}
+                className={`form-input-icon ${errors.email ? "form-input-error" : ""}`}
               />
             </div>
-            {errors.email && <p className="mt-1 text-xs text-red-500">{errors.email}</p>}
+            {errors.email && <p className="form-error">{errors.email}</p>}
           </div>
 
-          {/* Password */}
           <div>
-            <div className="mb-1.5 flex flex-wrap items-center justify-between gap-1">
-              <label className="text-sm font-semibold text-gray-800">Password</label>
-              <Link href="/forgot-password" className="text-xs font-semibold text-blue-600 hover:underline">
+            <div className="mb-2 flex flex-wrap items-center justify-between gap-1">
+              <label className="form-label mb-0">Password</label>
+              <Link href="/forgot-password" className="text-xs font-semibold text-indigo-600 hover:text-indigo-700">
                 Forgot password?
               </Link>
             </div>
             <div className="relative">
-              <FiLock className="pointer-events-none absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-gray-500" />
+              <FiLock className="pointer-events-none absolute left-3.5 top-1/2 h-4 w-4 -translate-y-1/2 text-slate-400" />
               <input
                 type={showPassword ? "text" : "password"}
                 autoComplete="current-password"
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
                 placeholder="••••••••"
-                disabled={loading || demoLoading || socialLoading !== null}
-                className={`min-h-[44px] w-full rounded-lg border py-2.5 pl-10 pr-10 text-sm font-medium text-gray-900 placeholder-gray-400 outline-none transition-colors focus:border-blue-500 focus:ring-1 focus:ring-blue-500 disabled:bg-gray-50 ${
-                  errors.password ? "border-red-400 bg-red-50/30" : "border-gray-200 bg-white"
-                }`}
+                disabled={isDisabled}
+                className={`form-input-icon pr-10 ${errors.password ? "form-input-error" : ""}`}
               />
               <button
                 type="button"
                 onClick={() => setShowPassword((v) => !v)}
-                disabled={loading || demoLoading || socialLoading !== null}
-                className="absolute right-3 top-1/2 flex h-6 w-6 -translate-y-1/2 items-center justify-center text-gray-500 hover:text-gray-700 disabled:opacity-50"
+                disabled={isDisabled}
+                className="absolute right-3 top-1/2 flex h-7 w-7 -translate-y-1/2 items-center justify-center rounded-lg text-slate-400 hover:bg-slate-100 hover:text-slate-600 disabled:opacity-50"
                 aria-label="Toggle password visibility"
               >
                 {showPassword ? <FiEyeOff className="h-4 w-4" /> : <FiEye className="h-4 w-4" />}
               </button>
             </div>
-            {errors.password && <p className="mt-1 text-xs text-red-500">{errors.password}</p>}
+            {errors.password && <p className="form-error">{errors.password}</p>}
           </div>
 
-          {/* Remember me */}
-          <label className="flex items-center gap-2 text-sm font-medium text-gray-700">
+          <label className="flex items-center gap-2.5 text-sm font-medium text-slate-600">
             <input
               type="checkbox"
               checked={rememberMe}
               onChange={(e) => setRememberMe(e.target.checked)}
-              disabled={loading || demoLoading || socialLoading !== null}
-              className="h-4 w-4 shrink-0 rounded border-gray-300 text-blue-600 focus:ring-blue-500 disabled:opacity-50"
+              disabled={isDisabled}
+              className="h-4 w-4 rounded border-slate-300 text-indigo-600 focus:ring-indigo-500 disabled:opacity-50"
             />
             Remember me
           </label>
 
           <button
             type="submit"
-            disabled={loading || demoLoading || socialLoading !== null}
-            className="mt-1 flex min-h-[46px] w-full items-center justify-center gap-2 rounded-lg bg-blue-600 text-sm font-semibold text-white transition-colors active:bg-blue-700 disabled:cursor-not-allowed disabled:opacity-60 sm:hover:bg-blue-700"
+            disabled={isDisabled}
+            className="btn btn-primary btn-lg mt-1 w-full rounded-xl"
           >
             {loading ? (
               <>
@@ -261,9 +257,9 @@ export default function LoginPage() {
           </button>
         </form>
 
-        <p className="mt-5 text-center text-sm text-gray-500 sm:mt-6">
+        <p className="mt-6 text-center text-sm text-slate-500">
           Don&apos;t have an account?{" "}
-          <Link href="/auth/register" className="font-semibold text-blue-600 hover:underline">
+          <Link href="/auth/register" className="font-semibold text-indigo-600 hover:text-indigo-700">
             Sign up
           </Link>
         </p>

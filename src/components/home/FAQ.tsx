@@ -1,4 +1,3 @@
-// components/home/FAQ.tsx
 "use client";
 
 import { useState } from "react";
@@ -41,19 +40,18 @@ export default function FAQ() {
   };
 
   return (
-    <section className="bg-gray-50 px-4 py-12 sm:px-6 sm:py-16 lg:px-8">
+    <section className="section-alt">
       <div className="mx-auto max-w-3xl">
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
           transition={{ duration: 0.5 }}
-          className="mb-8 text-center sm:mb-10"
+          className="section-header-center"
         >
-          <h2 className="text-2xl font-bold text-gray-900 sm:text-3xl">
-            Frequently Asked Questions
-          </h2>
-          <p className="mt-1 text-sm text-gray-500">Everything you need to know before you start.</p>
+          <span className="eyebrow mb-3">FAQ</span>
+          <h2 className="heading-section">Frequently Asked Questions</h2>
+          <p className="text-body">Everything you need to know before you start.</p>
         </motion.div>
 
         <div className="flex flex-col gap-3">
@@ -65,22 +63,22 @@ export default function FAQ() {
                 initial={{ opacity: 0, y: 16 }}
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true }}
-                transition={{ duration: 0.4, delay: index * 0.06 }}
-                className="overflow-hidden rounded-2xl border border-gray-100 bg-white shadow-sm"
+                transition={{ duration: 0.4, delay: index * 0.05 }}
+                className={`card overflow-hidden transition-shadow duration-200 ${isOpen ? "shadow-md ring-1 ring-indigo-100" : ""}`}
               >
                 <button
                   onClick={() => toggle(index)}
-                  className="flex min-h-[52px] w-full items-center justify-between gap-3 px-4 py-3.5 text-left sm:px-5"
+                  className="flex min-h-[56px] w-full items-center justify-between gap-4 px-5 py-4 text-left transition-colors hover:bg-slate-50/50"
                 >
-                  <span className="text-sm font-semibold text-gray-900 sm:text-base">
+                  <span className="text-sm font-semibold text-slate-900 sm:text-base">
                     {faq.question}
                   </span>
                   <motion.span
                     animate={{ rotate: isOpen ? 180 : 0 }}
                     transition={{ duration: 0.25 }}
-                    className="shrink-0"
+                    className={`flex h-8 w-8 shrink-0 items-center justify-center rounded-lg transition-colors ${isOpen ? "bg-indigo-50 text-indigo-600" : "bg-slate-100 text-slate-400"}`}
                   >
-                    <FiChevronDown className="h-4 w-4 text-gray-400" />
+                    <FiChevronDown className="h-4 w-4" />
                   </motion.span>
                 </button>
 
@@ -93,7 +91,7 @@ export default function FAQ() {
                       exit={{ height: 0, opacity: 0 }}
                       transition={{ duration: 0.3, ease: "easeInOut" }}
                     >
-                      <p className="px-4 pb-4 text-sm leading-relaxed text-gray-500 sm:px-5">
+                      <p className="border-t border-slate-100 px-5 pb-5 pt-4 text-sm leading-relaxed text-slate-500">
                         {faq.answer}
                       </p>
                     </motion.div>

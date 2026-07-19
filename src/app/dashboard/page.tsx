@@ -1,4 +1,3 @@
-// app/dashboard/page.tsx
 "use client";
 
 import { useQuery } from "@tanstack/react-query";
@@ -53,18 +52,18 @@ async function fetchProgressOverview(): Promise<ProgressPoint[]> {
 }
 
 const statCards = [
-  { key: "totalGoals" as const, label: "Total Goals", icon: FiTarget, bg: "bg-blue-50", color: "text-blue-600" },
-  { key: "roadmapsGenerated" as const, label: "Roadmaps Generated", icon: FiMap, bg: "bg-green-50", color: "text-green-600" },
-  { key: "aiConversations" as const, label: "AI Conversations", icon: FiMessageCircle, bg: "bg-purple-50", color: "text-purple-600" },
+  { key: "totalGoals" as const, label: "Total Goals", icon: FiTarget, bg: "bg-indigo-50", color: "text-indigo-600" },
+  { key: "roadmapsGenerated" as const, label: "Roadmaps Generated", icon: FiMap, bg: "bg-emerald-50", color: "text-emerald-600" },
+  { key: "aiConversations" as const, label: "AI Conversations", icon: FiMessageCircle, bg: "bg-violet-50", color: "text-violet-600" },
   { key: "skillsLearned" as const, label: "Skills Learned", icon: FiAward, bg: "bg-amber-50", color: "text-amber-600" },
 ];
 
 function StatCardSkeleton() {
   return (
-    <div className="animate-pulse rounded-2xl border border-gray-100 bg-white p-4 sm:p-5">
-      <div className="mb-3 h-9 w-9 rounded-xl bg-gray-100" />
-      <div className="mb-2 h-3 w-1/2 rounded bg-gray-200" />
-      <div className="h-5 w-1/3 rounded bg-gray-200" />
+    <div className="card card-body">
+      <div className="skeleton mb-4 h-10 w-10 rounded-xl" />
+      <div className="skeleton mb-2 h-3 w-1/2 rounded-lg" />
+      <div className="skeleton h-6 w-1/3 rounded-lg" />
     </div>
   );
 }
@@ -82,20 +81,19 @@ export default function DashboardPage() {
 
   return (
     <div className="mx-auto max-w-6xl">
-      <div className="mb-5 sm:mb-6">
-        <h1 className="text-xl font-bold text-gray-900 sm:text-2xl">Welcome back! 👋</h1>
-        <p className="mt-1 text-sm text-gray-500">Let's continue your journey toward your dream career.</p>
+      <div className="mb-6 sm:mb-8">
+        <h1 className="heading-page">Welcome back! 👋</h1>
+        <p className="mt-1.5 text-body">Let&apos;s continue your journey toward your dream career.</p>
       </div>
 
       {statsError && (
-        <div className="mb-5 flex items-start gap-2 rounded-lg bg-red-50 px-4 py-3 text-sm text-red-600">
+        <div className="alert alert-error mb-6">
           <FiAlertCircle className="mt-0.5 h-4 w-4 shrink-0" />
           <span>{(statsErrorObj as Error).message}</span>
         </div>
       )}
 
-      {/* Stat cards - 4 per row on desktop */}
-      <div className="mb-5 grid grid-cols-2 gap-3 sm:mb-6 sm:gap-4 lg:grid-cols-4">
+      <div className="mb-6 grid grid-cols-2 gap-4 lg:grid-cols-4">
         {statsLoading &&
           Array.from({ length: 4 }).map((_, i) => <StatCardSkeleton key={i} />)}
 
@@ -104,15 +102,12 @@ export default function DashboardPage() {
           statCards.map((card) => {
             const Icon = card.icon;
             return (
-              <div
-                key={card.key}
-                className="rounded-2xl border border-gray-100 bg-white p-4 shadow-sm sm:p-5"
-              >
-                <div className={`mb-3 flex h-9 w-9 items-center justify-center rounded-xl ${card.bg} sm:h-10 sm:w-10`}>
-                  <Icon className={`h-4.5 w-4.5 ${card.color} sm:h-5 sm:w-5`} />
+              <div key={card.key} className="card card-hover card-body">
+                <div className={`mb-4 flex h-10 w-10 items-center justify-center rounded-xl ${card.bg}`}>
+                  <Icon className={`h-5 w-5 ${card.color}`} />
                 </div>
-                <p className="text-xs text-gray-400">{card.label}</p>
-                <p className="mt-0.5 text-lg font-bold text-gray-900 sm:text-xl">
+                <p className="text-xs font-medium text-slate-400">{card.label}</p>
+                <p className="mt-1 text-2xl font-bold tracking-tight text-slate-900">
                   {stats[card.key]}
                 </p>
               </div>
@@ -120,20 +115,22 @@ export default function DashboardPage() {
           })}
       </div>
 
-      {/* Progress chart */}
-      <div className="rounded-2xl border border-gray-100 bg-white p-4 shadow-sm sm:p-6">
-        <h2 className="mb-4 text-base font-semibold text-gray-900">Your Progress Overview</h2>
+      <div className="card card-body">
+        <h2 className="heading-card mb-5">Your Progress Overview</h2>
 
         {progressLoading && (
-          <div className="flex h-64 items-center justify-center text-sm text-gray-400">
-            Loading chart...
+          <div className="flex h-64 items-center justify-center">
+            <div className="flex flex-col items-center gap-3">
+              <div className="h-8 w-8 animate-spin rounded-full border-2 border-indigo-200 border-t-indigo-600" />
+              <p className="text-sm text-slate-400">Loading chart...</p>
+            </div>
           </div>
         )}
 
         {!progressLoading && (!progressData || progressData.length === 0) && (
-          <div className="flex h-64 flex-col items-center justify-center text-center">
-            <p className="text-sm font-medium text-gray-600">No progress data yet</p>
-            <p className="mt-1 text-xs text-gray-400">Add goals and track progress to see your chart.</p>
+          <div className="empty-state py-12">
+            <p className="text-sm font-semibold text-slate-600">No progress data yet</p>
+            <p className="mt-1 text-xs text-slate-400">Add goals and track progress to see your chart.</p>
           </div>
         )}
 
@@ -141,26 +138,31 @@ export default function DashboardPage() {
           <div className="h-64 sm:h-72">
             <ResponsiveContainer width="100%" height="100%">
               <LineChart data={progressData} margin={{ top: 10, right: 10, left: -20, bottom: 0 }}>
-                <CartesianGrid strokeDasharray="3 3" stroke="#f3f4f6" />
-                <XAxis dataKey="month" tick={{ fontSize: 12, fill: "#9ca3af" }} axisLine={false} tickLine={false} />
+                <CartesianGrid strokeDasharray="3 3" stroke="#e2e8f0" />
+                <XAxis dataKey="month" tick={{ fontSize: 12, fill: "#94a3b8" }} axisLine={false} tickLine={false} />
                 <YAxis
-                  tick={{ fontSize: 12, fill: "#9ca3af" }}
+                  tick={{ fontSize: 12, fill: "#94a3b8" }}
                   axisLine={false}
                   tickLine={false}
                   domain={[0, 100]}
                   tickFormatter={(v) => `${v}%`}
                 />
                 <Tooltip
-                  contentStyle={{ borderRadius: 8, border: "1px solid #e5e7eb", fontSize: 13 }}
+                  contentStyle={{
+                    borderRadius: 12,
+                    border: "1px solid #e2e8f0",
+                    fontSize: 13,
+                    boxShadow: "0 4px 6px -1px rgb(15 23 42 / 0.07)",
+                  }}
                   formatter={(value: number) => [`${value}%`, "Progress"]}
                 />
                 <Line
                   type="monotone"
                   dataKey="progress"
-                  stroke="#2563eb"
+                  stroke="#4f46e5"
                   strokeWidth={2.5}
-                  dot={{ r: 4, fill: "#2563eb" }}
-                  activeDot={{ r: 6 }}
+                  dot={{ r: 4, fill: "#4f46e5", strokeWidth: 0 }}
+                  activeDot={{ r: 6, fill: "#4f46e5" }}
                 />
               </LineChart>
             </ResponsiveContainer>

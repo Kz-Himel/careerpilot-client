@@ -1,4 +1,3 @@
-// app/dashboard/ai-chat/page.tsx
 "use client";
 
 import { useState, useRef, useEffect } from "react";
@@ -72,7 +71,6 @@ export default function AIChatPage() {
   const sendMutation = useMutation({
     mutationFn: sendChatMessage,
     onMutate: async (message: string) => {
-      // optimistically show user message immediately
       await queryClient.cancelQueries({ queryKey: ["chat-history"] });
       const previous = queryClient.getQueryData<ChatMessage[]>(["chat-history"]) ?? [];
       queryClient.setQueryData<ChatMessage[]>(["chat-history"], [
@@ -116,17 +114,16 @@ export default function AIChatPage() {
 
   return (
     <div className="mx-auto flex h-[calc(100dvh-8rem)] max-w-3xl flex-col sm:h-[calc(100dvh-9rem)]">
-      {/* Header */}
-      <div className="mb-4 flex items-center justify-between">
+      <div className="mb-5 flex items-center justify-between">
         <div>
-          <h1 className="text-xl font-bold text-gray-900 sm:text-2xl">AI Career Coach</h1>
-          <p className="mt-0.5 text-sm text-gray-500">Ask anything about your career journey.</p>
+          <h1 className="heading-page text-xl sm:text-2xl">AI Career Coach</h1>
+          <p className="mt-0.5 text-sm text-slate-500">Ask anything about your career journey.</p>
         </div>
         {messages && messages.length > 0 && (
           <button
             onClick={() => clearMutation.mutate()}
             disabled={clearMutation.isPending}
-            className="flex min-h-[38px] items-center gap-1.5 rounded-lg border border-gray-200 px-3 text-xs font-medium text-gray-600 active:bg-gray-50 disabled:opacity-60 sm:hover:bg-gray-50"
+            className="btn btn-secondary btn-sm rounded-xl"
           >
             <FiTrash2 className="h-3.5 w-3.5" />
             Clear
@@ -134,46 +131,50 @@ export default function AIChatPage() {
         )}
       </div>
 
-      {/* Chat window */}
       <div
         ref={scrollRef}
-        className="flex-1 space-y-4 overflow-y-auto rounded-2xl border border-gray-100 bg-white p-4 shadow-sm sm:p-5"
+        className="card custom-scrollbar flex-1 space-y-4 overflow-y-auto p-4 sm:p-5"
       >
         {isLoading && (
-          <div className="flex h-full items-center justify-center text-sm text-gray-400">
-            Loading conversation...
+          <div className="flex h-full items-center justify-center">
+            <div className="flex flex-col items-center gap-3">
+              <div className="h-8 w-8 animate-spin rounded-full border-2 border-indigo-200 border-t-indigo-600" />
+              <p className="text-sm text-slate-400">Loading conversation...</p>
+            </div>
           </div>
         )}
 
         {!isLoading && (!messages || messages.length === 0) && (
           <div className="flex h-full flex-col items-center justify-center text-center">
-            <div className="mb-3 flex h-12 w-12 items-center justify-center rounded-full bg-blue-50">
-              <FiCpu className="h-6 w-6 text-blue-600" />
+            <div className="mb-4 flex h-14 w-14 items-center justify-center rounded-2xl bg-gradient-to-br from-indigo-50 to-violet-50">
+              <FiCpu className="h-7 w-7 text-indigo-600" />
             </div>
-            <p className="text-sm font-medium text-gray-700">Hello! How can I help you today?</p>
-            <p className="mt-1 text-xs text-gray-400">Ask about roadmaps, skills, or job readiness.</p>
+            <p className="text-sm font-semibold text-slate-800">Hello! How can I help you today?</p>
+            <p className="mt-1 text-xs text-slate-400">Ask about roadmaps, skills, or job readiness.</p>
           </div>
         )}
 
         {messages?.map((msg, i) => (
           <div
             key={i}
-            className={`flex items-start gap-2.5 ${
+            className={`flex items-start gap-3 ${
               msg.role === "user" ? "flex-row-reverse" : "flex-row"
             }`}
           >
             <div
               className={`flex h-8 w-8 shrink-0 items-center justify-center rounded-full ${
-                msg.role === "user" ? "bg-gray-100 text-gray-600" : "bg-blue-50 text-blue-600"
+                msg.role === "user"
+                  ? "bg-slate-100 text-slate-600"
+                  : "bg-gradient-to-br from-indigo-50 to-violet-50 text-indigo-600"
               }`}
             >
               {msg.role === "user" ? <FiUser className="h-4 w-4" /> : <FiCpu className="h-4 w-4" />}
             </div>
             <div
-              className={`max-w-[75%] rounded-2xl px-4 py-2.5 text-sm leading-relaxed sm:max-w-[70%] ${
+              className={`max-w-[75%] rounded-2xl px-4 py-3 text-sm leading-relaxed sm:max-w-[70%] ${
                 msg.role === "user"
-                  ? "bg-blue-600 text-white"
-                  : "bg-gray-50 text-gray-700"
+                  ? "bg-gradient-to-r from-indigo-600 to-violet-600 text-white shadow-sm"
+                  : "border border-slate-100 bg-slate-50 text-slate-700"
               }`}
             >
               {msg.content}
@@ -181,22 +182,20 @@ export default function AIChatPage() {
           </div>
         ))}
 
-        {/* Typing indicator */}
         {sendMutation.isPending && (
-          <div className="flex items-start gap-2.5">
-            <div className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-blue-50 text-blue-600">
+          <div className="flex items-start gap-3">
+            <div className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-indigo-50 text-indigo-600">
               <FiCpu className="h-4 w-4" />
             </div>
-            <div className="flex items-center gap-1 rounded-2xl bg-gray-50 px-4 py-3">
-              <span className="h-1.5 w-1.5 animate-bounce rounded-full bg-gray-400 [animation-delay:-0.3s]" />
-              <span className="h-1.5 w-1.5 animate-bounce rounded-full bg-gray-400 [animation-delay:-0.15s]" />
-              <span className="h-1.5 w-1.5 animate-bounce rounded-full bg-gray-400" />
+            <div className="flex items-center gap-1.5 rounded-2xl border border-slate-100 bg-slate-50 px-4 py-3">
+              <span className="h-1.5 w-1.5 animate-bounce rounded-full bg-indigo-400 [animation-delay:-0.3s]" />
+              <span className="h-1.5 w-1.5 animate-bounce rounded-full bg-indigo-400 [animation-delay:-0.15s]" />
+              <span className="h-1.5 w-1.5 animate-bounce rounded-full bg-indigo-400" />
             </div>
           </div>
         )}
       </div>
 
-      {/* Suggested prompts */}
       {suggestedPrompts.length > 0 && (
         <div className="mt-3 flex flex-wrap gap-2">
           {suggestedPrompts.map((prompt) => (
@@ -204,7 +203,7 @@ export default function AIChatPage() {
               key={prompt}
               onClick={() => handleSend(prompt)}
               disabled={sendMutation.isPending}
-              className="rounded-full border border-blue-100 bg-blue-50 px-3 py-1.5 text-xs font-medium text-blue-700 active:bg-blue-100 disabled:opacity-60 sm:hover:bg-blue-100"
+              className="badge badge-primary cursor-pointer px-3 py-1.5 transition-colors hover:bg-indigo-100 disabled:opacity-60"
             >
               {prompt}
             </button>
@@ -212,7 +211,6 @@ export default function AIChatPage() {
         </div>
       )}
 
-      {/* Input bar */}
       <div className="mt-3 flex items-center gap-2">
         <input
           type="text"
@@ -220,12 +218,12 @@ export default function AIChatPage() {
           onChange={(e) => setInput(e.target.value)}
           onKeyDown={(e) => e.key === "Enter" && handleSend()}
           placeholder="Ask anything..."
-          className="min-h-[46px] flex-1 rounded-lg border border-gray-200 px-4 text-sm outline-none focus:border-blue-500 focus:ring-1 focus:ring-blue-500"
+          className="form-input flex-1 rounded-xl"
         />
         <button
           onClick={() => handleSend()}
           disabled={sendMutation.isPending || !input.trim()}
-          className="flex min-h-[46px] min-w-[46px] items-center justify-center rounded-lg bg-blue-600 text-white transition-colors active:bg-blue-700 disabled:opacity-50 sm:hover:bg-blue-700"
+          className="btn btn-primary btn-md h-[44px] w-[44px] rounded-xl p-0"
         >
           <FiSend className="h-4 w-4" />
         </button>

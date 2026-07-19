@@ -1,8 +1,15 @@
-// components/share/Footer.tsx
 "use client";
 
 import Link from "next/link";
-import { FiMail, FiPhone, FiMapPin, FiTwitter, FiLinkedin, FiYoutube, FiInstagram } from "react-icons/fi";
+import {
+  FiMail,
+  FiPhone,
+  FiMapPin,
+  FiTwitter,
+  FiLinkedin,
+  FiYoutube,
+  FiInstagram,
+} from "react-icons/fi";
 
 const footerLinks = {
   product: [
@@ -33,28 +40,35 @@ const socialLinks = [
 
 export default function Footer() {
   return (
-    <footer className="border-t border-gray-100 bg-white px-4 py-10 sm:px-6 sm:py-12 lg:px-8">
-      <div className="mx-auto max-w-7xl">
-        <div className="grid grid-cols-1 gap-8 sm:grid-cols-2 lg:grid-cols-4">
+    <footer className="border-t border-slate-800/50 bg-slate-900 text-slate-300">
+      <div className="mx-auto max-w-7xl px-4 py-12 sm:px-6 sm:py-16 lg:px-8">
+        <div className="grid grid-cols-1 gap-10 sm:grid-cols-2 lg:grid-cols-4">
           {/* Brand + contact */}
           <div className="sm:col-span-2 lg:col-span-1">
-            <Link href="/" className="mb-3 flex items-center gap-2">
-              <span className="flex h-8 w-8 items-center justify-center rounded-lg bg-blue-600 text-sm font-bold text-white">
+            <Link href="/" className="mb-4 flex items-center gap-2.5">
+              <span className="flex h-9 w-9 items-center justify-center rounded-xl bg-gradient-to-br from-indigo-500 to-violet-600 text-sm font-bold text-white">
                 C
               </span>
-              <span className="text-lg font-bold text-gray-900">
-                CareerPilot <span className="text-blue-600">AI</span>
+              <span className="text-lg font-bold text-white">
+                CareerPilot{" "}
+                <span className="text-indigo-400">AI</span>
               </span>
             </Link>
-            <p className="mb-4 text-sm leading-relaxed text-gray-500">
+            <p className="mb-5 text-sm leading-relaxed text-slate-400">
               Your AI-powered career coach for personalized growth and success.
             </p>
-            <div className="flex flex-col gap-2 text-sm text-gray-500">
-              <a href="mailto:hello@careerpilot.ai" className="flex items-center gap-2 hover:text-blue-600">
+            <div className="flex flex-col gap-2.5 text-sm text-slate-400">
+              <a
+                href="mailto:hello@careerpilot.ai"
+                className="flex items-center gap-2 transition-colors hover:text-indigo-400"
+              >
                 <FiMail className="h-4 w-4 shrink-0" />
                 hello@careerpilot.ai
               </a>
-              <a href="tel:+8801234567890" className="flex items-center gap-2 hover:text-blue-600">
+              <a
+                href="tel:+8801234567890"
+                className="flex items-center gap-2 transition-colors hover:text-indigo-400"
+              >
                 <FiPhone className="h-4 w-4 shrink-0" />
                 +880 1234 567890
               </a>
@@ -67,11 +81,16 @@ export default function Footer() {
 
           {/* Product links */}
           <div>
-            <h3 className="mb-3 text-sm font-semibold text-gray-900">Product</h3>
-            <ul className="flex flex-col gap-2">
+            <h3 className="mb-4 text-sm font-semibold uppercase tracking-wider text-slate-200">
+              Product
+            </h3>
+            <ul className="flex flex-col gap-2.5">
               {footerLinks.product.map((link) => (
                 <li key={link.href}>
-                  <Link href={link.href} className="text-sm text-gray-500 hover:text-blue-600">
+                  <Link
+                    href={link.href}
+                    className="text-sm text-slate-400 transition-colors hover:text-white"
+                  >
                     {link.label}
                   </Link>
                 </li>
@@ -81,11 +100,16 @@ export default function Footer() {
 
           {/* Company links */}
           <div>
-            <h3 className="mb-3 text-sm font-semibold text-gray-900">Company</h3>
-            <ul className="flex flex-col gap-2">
+            <h3 className="mb-4 text-sm font-semibold uppercase tracking-wider text-slate-200">
+              Company
+            </h3>
+            <ul className="flex flex-col gap-2.5">
               {footerLinks.company.map((link) => (
                 <li key={link.href}>
-                  <Link href={link.href} className="text-sm text-gray-500 hover:text-blue-600">
+                  <Link
+                    href={link.href}
+                    className="text-sm text-slate-400 transition-colors hover:text-white"
+                  >
                     {link.label}
                   </Link>
                 </li>
@@ -95,11 +119,16 @@ export default function Footer() {
 
           {/* Support links */}
           <div>
-            <h3 className="mb-3 text-sm font-semibold text-gray-900">Support</h3>
-            <ul className="flex flex-col gap-2">
+            <h3 className="mb-4 text-sm font-semibold uppercase tracking-wider text-slate-200">
+              Support
+            </h3>
+            <ul className="flex flex-col gap-2.5">
               {footerLinks.support.map((link) => (
                 <li key={link.href}>
-                  <Link href={link.href} className="text-sm text-gray-500 hover:text-blue-600">
+                  <Link
+                    href={link.href}
+                    className="text-sm text-slate-400 transition-colors hover:text-white"
+                  >
                     {link.label}
                   </Link>
                 </li>
@@ -109,11 +138,11 @@ export default function Footer() {
         </div>
 
         {/* Bottom bar */}
-        <div className="mt-8 flex flex-col items-center gap-4 border-t border-gray-100 pt-6 sm:flex-row sm:justify-between">
-          <p className="text-xs text-gray-400">
+        <div className="mt-10 flex flex-col items-center gap-5 border-t border-slate-800 pt-8 sm:flex-row sm:justify-between">
+          <p className="text-xs text-slate-500">
             © {new Date().getFullYear()} CareerPilot AI. All rights reserved.
           </p>
-          <div className="flex items-center gap-3">
+          <div className="flex items-center gap-2">
             {socialLinks.map((social) => {
               const Icon = social.icon;
               return (
@@ -123,7 +152,7 @@ export default function Footer() {
                   target="_blank"
                   rel="noopener noreferrer"
                   aria-label={social.label}
-                  className="flex h-9 w-9 items-center justify-center rounded-full border border-gray-200 text-gray-500 transition-colors hover:border-blue-200 hover:bg-blue-50 hover:text-blue-600"
+                  className="flex h-10 w-10 items-center justify-center rounded-xl border border-slate-700 text-slate-400 transition-all duration-150 hover:border-indigo-500/50 hover:bg-indigo-500/10 hover:text-indigo-400"
                 >
                   <Icon className="h-4 w-4" />
                 </a>

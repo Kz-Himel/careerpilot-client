@@ -3,7 +3,7 @@
 import { useState, useEffect } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { authClient } from "@/lib/auth-client"; 
+import { authClient } from "@/lib/auth-client";
 import {
   FiLogOut,
   FiMenu,
@@ -23,11 +23,9 @@ export default function Navbar() {
   const [mounted, setMounted] = useState(false);
   const [mobileOpen, setMobileOpen] = useState(false);
 
-  // Better-Auth এর সেশন হুক
-  const { data: session, isPending } = authClient.useSession(); 
+  const { data: session, isPending } = authClient.useSession();
   const isLoggedIn = !!session;
 
-  // প্রথম রেন্ডারে সার্ভার ও ক্লায়েন্টের সিঙ্ক ঠিক রাখতে এই useEffect ব্যবহার করা হয়েছে
   useEffect(() => {
     setMounted(true);
   }, []);
@@ -37,40 +35,49 @@ export default function Navbar() {
       fetchOptions: {
         onSuccess: () => {
           window.location.href = "/";
-        }
-      }
+        },
+      },
     });
   };
 
   const isActive = (href: string) => pathname === href;
 
-  // যতক্ষণ না কম্পোনেন্টটি মাউন্ট হচ্ছে অথবা সেশন লোড হচ্ছে, 
-  // ততক্ষণ সার্ভার ও ক্লায়েন্ট দুই জায়গাতেই এই সেম স্কেলিটন/প্লেসহোল্ডার লেআউট রেন্ডার হবে।
   if (!mounted || isPending) {
-    return <nav className="h-16 w-full border-b border-gray-100 bg-white" />;
+    return (
+      <nav className="nav-glass h-16 w-full">
+        <div className="mx-auto flex h-16 max-w-7xl items-center px-4 sm:px-6 lg:px-8">
+          <div className="skeleton h-8 w-40 rounded-lg" />
+        </div>
+      </nav>
+    );
   }
 
   return (
-    <nav className="sticky top-0 z-50 w-full border-b border-gray-100 bg-white backdrop-blur-md">
+    <nav className="nav-glass">
       <div className="mx-auto flex h-16 max-w-7xl items-center justify-between px-4 sm:px-6 lg:px-8">
-        {/* Logo - left */}
-        <Link href="/" className="flex shrink-0 items-center gap-2">
-          <span className="flex h-8 w-8 items-center justify-center rounded-lg bg-blue-600 text-sm font-bold text-white">
+        {/* Logo */}
+        <Link href="/" className="group flex shrink-0 items-center gap-2.5">
+          <span className="flex h-9 w-9 items-center justify-center rounded-xl bg-gradient-to-br from-indigo-600 to-violet-600 text-sm font-bold text-white shadow-sm transition-transform duration-200 group-hover:scale-105">
             C
           </span>
-          <span className="text-lg font-bold text-gray-900">
-            CareerPilot <span className="text-blue-600">AI</span>
+          <span className="text-lg font-bold tracking-tight text-slate-900">
+            CareerPilot{" "}
+            <span className="bg-gradient-to-r from-indigo-600 to-violet-600 bg-clip-text text-transparent">
+              AI
+            </span>
           </span>
         </Link>
 
-        {/* Desktop links - middle/right */}
+        {/* Desktop links */}
         <div className="hidden items-center gap-1 lg:flex">
           {publicRoutes.map((route) => (
             <Link
               key={route.href}
               href={route.href}
-              className={`rounded-md px-3 py-2 text-sm font-medium transition-colors ${
-                isActive(route.href) ? "text-blue-600" : "text-gray-600 hover:text-blue-600"
+              className={`rounded-lg px-3.5 py-2 text-sm font-medium transition-colors duration-150 ${
+                isActive(route.href)
+                  ? "bg-indigo-50 text-indigo-700"
+                  : "text-slate-600 hover:bg-slate-50 hover:text-indigo-600"
               }`}
             >
               {route.label}
@@ -78,40 +85,42 @@ export default function Navbar() {
           ))}
         </div>
 
-        {/* Right side auth buttons - desktop */}
+        {/* Desktop auth */}
         <div className="hidden items-center gap-2 lg:flex">
           {!isLoggedIn ? (
             <>
               <Link
                 href="/auth/login"
-                className="rounded-md px-4 py-2 text-sm font-medium text-gray-700 hover:text-blue-600"
+                className="btn btn-ghost btn-md rounded-lg px-4"
               >
                 Log in
               </Link>
               <Link
                 href="/auth/register"
-                className="rounded-md bg-blue-600 px-4 py-2 text-sm font-medium text-white transition-colors hover:bg-blue-700"
+                className="btn btn-primary btn-md rounded-xl px-5 shadow-sm"
               >
                 Get Started
               </Link>
             </>
           ) : (
-            <div className="flex items-center gap-4 pl-2">
-              <Link 
-                href="/dashboard" 
-                className={`flex items-center gap-2 rounded-md px-3 py-1.5 text-sm font-medium transition-colors ${
-                  isActive("/dashboard") ? "text-blue-600 bg-blue-50" : "text-gray-600 hover:text-blue-600 hover:bg-gray-50"
+            <div className="flex items-center gap-3 pl-2">
+              <Link
+                href="/dashboard"
+                className={`flex items-center gap-2.5 rounded-xl px-3 py-1.5 text-sm font-medium transition-all duration-150 ${
+                  isActive("/dashboard")
+                    ? "bg-indigo-50 text-indigo-700"
+                    : "text-slate-600 hover:bg-slate-50 hover:text-indigo-600"
                 }`}
               >
-                <div className="flex h-8 w-8 items-center justify-center rounded-full bg-blue-100 text-blue-700">
+                <div className="flex h-8 w-8 items-center justify-center rounded-full bg-gradient-to-br from-indigo-100 to-violet-100 text-indigo-700">
                   <FiUser className="h-4 w-4" />
                 </div>
                 <span>Dashboard</span>
               </Link>
-              
+
               <button
                 onClick={handleLogout}
-                className="flex items-center gap-1.5 rounded-md border border-gray-200 px-3 py-2 text-sm font-medium text-gray-600 hover:bg-gray-50"
+                className="btn btn-secondary btn-sm gap-1.5 rounded-xl"
               >
                 <FiLogOut className="h-4 w-4" />
                 Logout
@@ -123,24 +132,26 @@ export default function Navbar() {
         {/* Mobile menu button */}
         <button
           onClick={() => setMobileOpen((v) => !v)}
-          className="flex h-9 w-9 items-center justify-center rounded-md text-gray-700 lg:hidden"
+          className="flex h-10 w-10 items-center justify-center rounded-xl text-slate-700 transition-colors hover:bg-slate-100 lg:hidden"
           aria-label="Toggle menu"
         >
-          {mobileOpen ? <FiX className="h-6 w-6" /> : <FiMenu className="h-6 w-6" />}
+          {mobileOpen ? <FiX className="h-5 w-5" /> : <FiMenu className="h-5 w-5" />}
         </button>
       </div>
 
       {/* Mobile menu */}
       {mobileOpen && (
-        <div className="border-t border-gray-100 bg-white px-4 py-3 lg:hidden">
+        <div className="border-t border-slate-200/60 bg-white/95 px-4 py-4 backdrop-blur-xl lg:hidden">
           <div className="flex flex-col gap-1">
             {publicRoutes.map((route) => (
               <Link
                 key={route.href}
                 href={route.href}
                 onClick={() => setMobileOpen(false)}
-                className={`rounded-md px-3 py-2.5 text-sm font-medium ${
-                  isActive(route.href) ? "bg-blue-50 text-blue-700" : "text-gray-700 hover:bg-gray-50"
+                className={`rounded-xl px-3.5 py-3 text-sm font-medium transition-colors ${
+                  isActive(route.href)
+                    ? "bg-indigo-50 text-indigo-700"
+                    : "text-slate-700 hover:bg-slate-50"
                 }`}
               >
                 {route.label}
@@ -148,20 +159,20 @@ export default function Navbar() {
             ))}
           </div>
 
-          <div className="mt-3 flex flex-col gap-2 border-t border-gray-100 pt-3">
+          <div className="mt-4 flex flex-col gap-2 border-t border-slate-100 pt-4">
             {!isLoggedIn ? (
               <>
                 <Link
                   href="/auth/login"
                   onClick={() => setMobileOpen(false)}
-                  className="rounded-md border border-gray-200 px-4 py-2.5 text-center text-sm font-medium text-gray-700"
+                  className="btn btn-secondary btn-md w-full rounded-xl"
                 >
                   Log in
                 </Link>
                 <Link
                   href="/auth/register"
                   onClick={() => setMobileOpen(false)}
-                  className="rounded-md bg-blue-600 px-4 py-2.5 text-center text-sm font-medium text-white"
+                  className="btn btn-primary btn-md w-full rounded-xl"
                 >
                   Get Started
                 </Link>
@@ -171,11 +182,13 @@ export default function Navbar() {
                 <Link
                   href="/dashboard"
                   onClick={() => setMobileOpen(false)}
-                  className={`flex items-center gap-3 rounded-md px-3 py-2.5 text-sm font-medium ${
-                    isActive("/dashboard") ? "bg-blue-50 text-blue-700" : "text-gray-700 hover:bg-gray-50"
+                  className={`flex items-center gap-3 rounded-xl px-3.5 py-3 text-sm font-medium ${
+                    isActive("/dashboard")
+                      ? "bg-indigo-50 text-indigo-700"
+                      : "text-slate-700 hover:bg-slate-50"
                   }`}
                 >
-                  <div className="flex h-8 w-8 items-center justify-center rounded-full bg-blue-100 text-blue-700">
+                  <div className="flex h-8 w-8 items-center justify-center rounded-full bg-indigo-100 text-indigo-700">
                     <FiUser className="h-4 w-4" />
                   </div>
                   <span>Dashboard</span>
@@ -186,7 +199,7 @@ export default function Navbar() {
                     handleLogout();
                     setMobileOpen(false);
                   }}
-                  className="flex items-center justify-center gap-2 rounded-md border border-gray-200 px-4 py-2.5 text-sm font-medium text-gray-600 hover:bg-gray-50"
+                  className="btn btn-secondary btn-md w-full rounded-xl"
                 >
                   <FiLogOut className="h-4 w-4" />
                   Logout

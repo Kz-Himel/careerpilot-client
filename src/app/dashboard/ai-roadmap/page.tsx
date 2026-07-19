@@ -1,4 +1,3 @@
-// app/dashboard/ai-roadmap/page.tsx
 "use client";
 
 import { useState } from "react";
@@ -19,12 +18,10 @@ import {
 import { authClient } from "@/lib/auth-client";
 import type { RoadmapData, RoadmapFormInput } from "@/types/roadmap";
 
-// টাইপ এক্সটেনশন: ফর্মে savedGuideId যুক্ত করা
 interface ExtendedRoadmapFormInput extends RoadmapFormInput {
   savedGuideId?: string;
 }
 
-// সেভ করা গাইডের টাইপ
 interface SavedGuide {
   _id: string;
   title: string;
@@ -37,7 +34,6 @@ async function fetchSavedGuides(): Promise<SavedGuide[]> {
   const tokenRes = await authClient.token?.();
   const token = tokenRes?.data?.token;
 
-  // ইউআরএল-এর শেষে /saved যোগ করা হলো
   const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/saved-goals/saved`, {
     method: "GET",
     headers: {
@@ -101,7 +97,6 @@ export default function AIRoadmapPage() {
   const [roadmap, setRoadmap] = useState<RoadmapData | null>(null);
   const [showSaved, setShowSaved] = useState(false);
 
-  // সেভ করা গোলগুলো সার্ভার থেকে নিয়ে আসা
   const { data: savedGuides = [], isLoading: isLoadingGuides } = useQuery({
     queryKey: ["savedGuides"],
     queryFn: fetchSavedGuides,
@@ -162,31 +157,27 @@ export default function AIRoadmapPage() {
 
   return (
     <div className="mx-auto max-w-5xl">
-      <div className="mb-5 sm:mb-6">
-        <h1 className="text-xl font-bold text-gray-900 sm:text-2xl">AI Career Roadmap Generator</h1>
-        <p className="mt-1 text-sm text-gray-500">Tell us your goal and get a personalized roadmap.</p>
+      <div className="mb-6 sm:mb-8">
+        <h1 className="heading-page">AI Career Roadmap Generator</h1>
+        <p className="mt-1.5 text-body">Tell us your goal and get a personalized roadmap.</p>
       </div>
 
-      <div className="grid grid-cols-1 gap-5 lg:grid-cols-[380px_1fr]">
-        {/* Form panel */}
+      <div className="grid grid-cols-1 gap-6 lg:grid-cols-[380px_1fr]">
         <form
           onSubmit={handleGenerate}
-          className="flex h-fit flex-col gap-4 rounded-2xl border border-gray-100 bg-white p-5 shadow-sm sm:p-6"
+          className="card card-body flex h-fit flex-col gap-4"
           noValidate
         >
-          <h2 className="text-base font-semibold text-gray-900">Tell us your goal</h2>
+          <h2 className="heading-card">Tell us your goal</h2>
 
-          {/* সেভ করা গোল সিলেক্ট করার ড্রপডাউন (সবসময় দৃশ্যমান) */}
           <div>
-            <label className="mb-1.5 block text-sm font-medium text-gray-700">
-              Use a Saved Goal as Context (Optional)
-            </label>
+            <label className="form-label">Use a Saved Goal as Context (Optional)</label>
             <div className="relative">
-              <FiBookmark className="pointer-events-none absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-gray-400" />
+              <FiBookmark className="pointer-events-none absolute left-3.5 top-1/2 h-4 w-4 -translate-y-1/2 text-slate-400" />
               <select
                 value={form.savedGuideId || ""}
                 onChange={(e) => handleSavedGuideChange(e.target.value)}
-                className="min-h-[44px] w-full appearance-none rounded-lg border border-gray-200 py-2.5 pl-10 pr-3 text-sm outline-none focus:border-blue-500 focus:ring-1 focus:ring-blue-500"
+                className="form-select pl-10"
               >
                 <option value="">-- Select from your saved goals --</option>
                 {isLoadingGuides ? (
@@ -205,48 +196,44 @@ export default function AIRoadmapPage() {
           </div>
 
           <div>
-            <label className="mb-1.5 block text-sm font-medium text-gray-700">
-              I want to become
-            </label>
+            <label className="form-label">I want to become</label>
             <div className="relative">
-              <FiTarget className="pointer-events-none absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-gray-400" />
+              <FiTarget className="pointer-events-none absolute left-3.5 top-1/2 h-4 w-4 -translate-y-1/2 text-slate-400" />
               <input
                 type="text"
                 value={form.targetRole}
                 onChange={(e) => setForm((p) => ({ ...p, targetRole: e.target.value }))}
                 placeholder="Frontend Developer"
                 required
-                className="min-h-[44px] w-full rounded-lg border border-gray-200 py-2.5 pl-10 pr-3 text-sm outline-none focus:border-blue-500 focus:ring-1 focus:ring-blue-500"
+                className="form-input-icon"
               />
             </div>
           </div>
 
           <div>
-            <label className="mb-1.5 block text-sm font-medium text-gray-700">Current Role</label>
+            <label className="form-label">Current Role</label>
             <div className="relative">
-              <FiBriefcase className="pointer-events-none absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-gray-400" />
+              <FiBriefcase className="pointer-events-none absolute left-3.5 top-1/2 h-4 w-4 -translate-y-1/2 text-slate-400" />
               <input
                 type="text"
                 value={form.currentRole}
                 onChange={(e) => setForm((p) => ({ ...p, currentRole: e.target.value }))}
                 placeholder="Student, Junior Developer, etc."
-                className="min-h-[44px] w-full rounded-lg border border-gray-200 py-2.5 pl-10 pr-3 text-sm outline-none focus:border-blue-500 focus:ring-1 focus:ring-blue-500"
+                className="form-input-icon"
               />
             </div>
           </div>
 
           <div>
-            <label className="mb-1.5 block text-sm font-medium text-gray-700">
-              My Experience Level
-            </label>
+            <label className="form-label">My Experience Level</label>
             <div className="relative">
-              <FiBarChart2 className="pointer-events-none absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-gray-400" />
+              <FiBarChart2 className="pointer-events-none absolute left-3.5 top-1/2 h-4 w-4 -translate-y-1/2 text-slate-400" />
               <select
                 value={form.experienceLevel}
                 onChange={(e) =>
-                  setForm((p) => ({ ...p, experienceLevel: e.target.value as any }))
+                  setForm((p) => ({ ...p, experienceLevel: e.target.value as ExtendedRoadmapFormInput["experienceLevel"] }))
                 }
-                className="min-h-[44px] w-full appearance-none rounded-lg border border-gray-200 py-2.5 pl-10 pr-3 text-sm outline-none focus:border-blue-500 focus:ring-1 focus:ring-blue-500"
+                className="form-select pl-10"
               >
                 <option value="beginner">Beginner</option>
                 <option value="intermediate">Intermediate</option>
@@ -256,15 +243,10 @@ export default function AIRoadmapPage() {
           </div>
 
           <div>
-            <label className="mb-1.5 block text-sm font-medium text-gray-700">
-              Current Skills (Optional)
-            </label>
+            <label className="form-label">Current Skills (Optional)</label>
             <div className="mb-2 flex flex-wrap gap-1.5">
               {form.currentSkills.map((skill) => (
-                <span
-                  key={skill}
-                  className="flex items-center gap-1 rounded-full bg-blue-50 px-2.5 py-1 text-xs font-medium text-blue-700"
-                >
+                <span key={skill} className="badge badge-primary flex items-center gap-1 px-2.5 py-1">
                   {skill}
                   <button type="button" onClick={() => removeSkill(skill)}>
                     <FiX className="h-3 w-3" />
@@ -284,12 +266,12 @@ export default function AIRoadmapPage() {
                   }
                 }}
                 placeholder="HTML, CSS, JavaScript..."
-                className="min-h-[42px] flex-1 rounded-lg border border-gray-200 px-3 text-sm outline-none focus:border-blue-500 focus:ring-1 focus:ring-blue-500"
+                className="form-input flex-1"
               />
               <button
                 type="button"
                 onClick={addSkill}
-                className="flex min-h-[42px] min-w-[42px] items-center justify-center rounded-lg border border-gray-200 text-gray-500 active:bg-gray-50 sm:hover:bg-gray-50"
+                className="btn btn-secondary btn-md h-[44px] w-[44px] rounded-xl p-0"
               >
                 <FiPlus className="h-4 w-4" />
               </button>
@@ -297,17 +279,15 @@ export default function AIRoadmapPage() {
           </div>
 
           <div>
-            <label className="mb-1.5 block text-sm font-medium text-gray-700">
-              Weekly Study Hours
-            </label>
+            <label className="form-label">Weekly Study Hours</label>
             <div className="relative">
-              <FiClock className="pointer-events-none absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-gray-400" />
+              <FiClock className="pointer-events-none absolute left-3.5 top-1/2 h-4 w-4 -translate-y-1/2 text-slate-400" />
               <select
                 value={form.weeklyStudyHours}
                 onChange={(e) =>
                   setForm((p) => ({ ...p, weeklyStudyHours: Number(e.target.value) }))
                 }
-                className="min-h-[44px] w-full appearance-none rounded-lg border border-gray-200 py-2.5 pl-10 pr-3 text-sm outline-none focus:border-blue-500 focus:ring-1 focus:ring-blue-500"
+                className="form-select pl-10"
               >
                 <option value={5}>5 hrs</option>
                 <option value={10}>10 hrs</option>
@@ -318,7 +298,7 @@ export default function AIRoadmapPage() {
           </div>
 
           {generateMutation.isError && (
-            <div className="flex items-start gap-2 rounded-lg bg-red-50 px-3 py-2.5 text-sm text-red-600">
+            <div className="alert alert-error">
               <FiAlertCircle className="mt-0.5 h-4 w-4 shrink-0" />
               <span>{(generateMutation.error as Error).message}</span>
             </div>
@@ -327,19 +307,20 @@ export default function AIRoadmapPage() {
           <button
             type="submit"
             disabled={generateMutation.isPending}
-            className="mt-1 min-h-[46px] w-full rounded-lg bg-blue-600 text-sm font-semibold text-white transition-colors active:bg-blue-700 disabled:opacity-60 sm:hover:bg-blue-700"
+            className="btn btn-primary btn-lg mt-1 w-full rounded-xl"
           >
             {generateMutation.isPending ? "Generating..." : "Generate Roadmap"}
           </button>
         </form>
 
-        {/* Roadmap display panel */}
-        <div className="rounded-2xl border border-gray-100 bg-white p-5 shadow-sm sm:p-6">
+        <div className="card card-body min-h-[400px]">
           {!roadmap && !generateMutation.isPending && (
-            <div className="flex h-full min-h-[300px] flex-col items-center justify-center text-center">
-              <FiTarget className="mb-3 h-10 w-10 text-gray-300" />
-              <p className="text-sm font-medium text-gray-600">No roadmap yet</p>
-              <p className="mt-1 text-xs text-gray-400">
+            <div className="empty-state h-full border-0 bg-transparent py-12">
+              <div className="mb-4 flex h-14 w-14 items-center justify-center rounded-2xl bg-slate-100">
+                <FiTarget className="h-7 w-7 text-slate-300" />
+              </div>
+              <p className="text-sm font-semibold text-slate-600">No roadmap yet</p>
+              <p className="mt-1 text-xs text-slate-400">
                 Fill the form and generate your personalized roadmap.
               </p>
             </div>
@@ -347,8 +328,8 @@ export default function AIRoadmapPage() {
 
           {generateMutation.isPending && (
             <div className="flex h-full min-h-[300px] flex-col items-center justify-center text-center">
-              <div className="mb-3 h-8 w-8 animate-spin rounded-full border-2 border-blue-200 border-t-blue-600" />
-              <p className="text-sm text-gray-500">Generating your roadmap...</p>
+              <div className="mb-4 h-10 w-10 animate-spin rounded-full border-2 border-indigo-200 border-t-indigo-600" />
+              <p className="text-sm font-medium text-slate-500">Generating your roadmap...</p>
             </div>
           )}
 
@@ -356,16 +337,14 @@ export default function AIRoadmapPage() {
             <>
               <div className="mb-5 flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
                 <div>
-                  <h2 className="text-base font-bold text-gray-900 sm:text-lg">
-                    {roadmap.targetRole} Roadmap
-                  </h2>
-                  <p className="text-xs text-gray-400">{roadmap.durationMonths} Month Plan</p>
+                  <h2 className="heading-card">{roadmap.targetRole} Roadmap</h2>
+                  <p className="text-xs text-slate-400">{roadmap.durationMonths} Month Plan</p>
                 </div>
                 <div className="flex gap-2">
                   <button
                     onClick={handleRegenerate}
                     disabled={generateMutation.isPending}
-                    className="flex min-h-[38px] items-center gap-1.5 rounded-lg border border-gray-200 px-3 text-xs font-medium text-gray-700 active:bg-gray-50 disabled:opacity-60 sm:hover:bg-gray-50"
+                    className="btn btn-secondary btn-sm rounded-xl"
                   >
                     <FiRefreshCw className="h-3.5 w-3.5" />
                     Regenerate
@@ -373,7 +352,7 @@ export default function AIRoadmapPage() {
                   <button
                     onClick={() => saveMutation.mutate(roadmap)}
                     disabled={saveMutation.isPending}
-                    className="flex min-h-[38px] items-center gap-1.5 rounded-lg bg-blue-600 px-3 text-xs font-semibold text-white active:bg-blue-700 disabled:opacity-60 sm:hover:bg-blue-700"
+                    className="btn btn-primary btn-sm rounded-xl"
                   >
                     <FiSave className="h-3.5 w-3.5" />
                     {saveMutation.isPending ? "Saving..." : "Save"}
@@ -382,7 +361,7 @@ export default function AIRoadmapPage() {
               </div>
 
               {showSaved && (
-                <div className="mb-4 flex items-start gap-2 rounded-lg bg-green-50 px-3 py-2.5 text-sm text-green-700">
+                <div className="alert alert-success mb-4">
                   <FiCheckCircle className="mt-0.5 h-4 w-4 shrink-0" />
                   <span>Roadmap saved successfully!</span>
                 </div>
@@ -392,17 +371,17 @@ export default function AIRoadmapPage() {
                 {roadmap.months.map((month) => (
                   <div
                     key={month.monthNumber}
-                    className="rounded-xl border border-gray-100 bg-gray-50 p-4"
+                    className="rounded-xl border border-slate-100 bg-slate-50/80 p-4 transition-colors hover:border-indigo-100 hover:bg-indigo-50/30"
                   >
-                    <div className="mb-2 flex items-center gap-2">
-                      <span className="flex h-6 w-6 shrink-0 items-center justify-center rounded-full bg-blue-600 text-[11px] font-bold text-white">
+                    <div className="mb-2 flex items-center gap-2.5">
+                      <span className="flex h-7 w-7 shrink-0 items-center justify-center rounded-full bg-gradient-to-br from-indigo-600 to-violet-600 text-[11px] font-bold text-white">
                         {month.monthNumber}
                       </span>
-                      <h3 className="text-sm font-semibold text-gray-900">{month.title}</h3>
+                      <h3 className="text-sm font-semibold text-slate-900">{month.title}</h3>
                     </div>
-                    <ul className="ml-8 flex flex-col gap-1">
+                    <ul className="ml-9 flex flex-col gap-1">
                       {month.topics.map((topic, i) => (
-                        <li key={i} className="text-xs text-gray-600 sm:text-sm">
+                        <li key={i} className="text-xs text-slate-600 sm:text-sm">
                           • {topic}
                         </li>
                       ))}

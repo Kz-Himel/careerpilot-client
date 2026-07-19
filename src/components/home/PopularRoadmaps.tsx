@@ -1,9 +1,9 @@
-// components/home/PopularRoadmaps.tsx
 "use client";
 
 import { motion } from "framer-motion";
 import Link from "next/link";
 import { useQuery } from "@tanstack/react-query";
+import { FiArrowRight } from "react-icons/fi";
 import GoalCard, { GoalCardSkeleton } from "@/components/explore/GoalCard";
 import type { Goal } from "@/types/goal";
 
@@ -24,33 +24,38 @@ export default function PopularRoadmaps() {
   });
 
   return (
-    <section className="px-4 py-12 sm:px-6 sm:py-16 lg:px-8">
+    <section className="section">
       <div className="mx-auto max-w-7xl">
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
           transition={{ duration: 0.5 }}
-          className="mb-8 flex flex-col gap-2 sm:mb-10 sm:flex-row sm:items-end sm:justify-between"
+          className="section-header sm:flex-row sm:items-end sm:justify-between"
         >
           <div>
-            <h2 className="text-2xl font-bold text-gray-900 sm:text-3xl">
-              Explore Popular Career Goals
-            </h2>
-            <p className="mt-1 text-sm text-gray-500">
+            <span className="eyebrow mb-3">Trending</span>
+            <h2 className="heading-section">Explore Popular Career Goals</h2>
+            <p className="mt-2 text-body">
               See what career goals other learners are working toward.
             </p>
           </div>
-          <Link href="/explore" className="text-sm font-semibold text-blue-600 hover:underline">
-            View All →
+          <Link
+            href="/explore"
+            className="group inline-flex items-center gap-1.5 text-sm font-semibold text-indigo-600 transition-colors hover:text-indigo-700"
+          >
+            View All
+            <FiArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-0.5" />
           </Link>
         </motion.div>
 
         {isError && (
-          <p className="text-center text-sm text-red-500">Failed to load career goals.</p>
+          <div className="alert alert-error mb-6">
+            <span>Failed to load career goals.</span>
+          </div>
         )}
 
-        <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-4">
+        <div className="grid grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-4">
           {isLoading &&
             Array.from({ length: 4 }).map((_, i) => <GoalCardSkeleton key={i} />)}
 
@@ -61,8 +66,7 @@ export default function PopularRoadmaps() {
                 initial={{ opacity: 0, y: 24 }}
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true }}
-                transition={{ duration: 0.4, delay: i * 0.1 }}
-                whileHover={{ y: -4 }}
+                transition={{ duration: 0.4, delay: i * 0.08 }}
               >
                 <GoalCard goal={goal} />
               </motion.div>
@@ -70,7 +74,9 @@ export default function PopularRoadmaps() {
         </div>
 
         {!isLoading && goals?.length === 0 && (
-          <p className="text-center text-sm text-gray-400">No career goals yet.</p>
+          <div className="empty-state">
+            <p className="text-sm font-medium text-slate-600">No career goals yet.</p>
+          </div>
         )}
       </div>
     </section>
