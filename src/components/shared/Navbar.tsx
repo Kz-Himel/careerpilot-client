@@ -1,9 +1,9 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { authClient } from "@/lib/auth-client"; // তোমার প্রজেক্টের সঠিক পাথ অনুযায়ী authClient ইম্পোর্ট করো
+import { authClient } from "@/lib/auth-client"; 
 import {
   FiLogOut,
   FiMenu,
@@ -15,21 +15,23 @@ const publicRoutes = [
   { label: "Home", href: "/" },
   { label: "Explore Careers", href: "/explore" },
   { label: "Features", href: "/features" },
-  { label: "Pricing", href: "/pricing" },
-  { label: "Blog", href: "/blog" },
   { label: "About", href: "/about" },
 ];
 
 export default function Navbar() {
   const pathname = usePathname();
-  
-  // Better-Auth এর রিয়েল সেশন হুক
+  const [mounted, setMounted] = useState(false);
+  const [mobileOpen, setMobileOpen] = useState(false);
+
+  // Better-Auth এর সেশন হুক
   const { data: session, isPending } = authClient.useSession(); 
   const isLoggedIn = !!session;
 
-  const [mobileOpen, setMobileOpen] = useState(false);
+  // প্রথম রেন্ডারে সার্ভার ও ক্লায়েন্টের সিঙ্ক ঠিক রাখতে এই useEffect ব্যবহার করা হয়েছে
+  useEffect(() => {
+    setMounted(true);
+  }, []);
 
-  // রিয়েল লগআউট ফাংশন
   const handleLogout = async () => {
     await authClient.signOut({
       fetchOptions: {
@@ -42,11 +44,14 @@ export default function Navbar() {
 
   const isActive = (href: string) => pathname === href;
 
-  // সেশন লোড হওয়ার সময় ফ্লিকারিং বন্ধ করতে
-  if (isPending) return <nav className="h-16 bg-white border-b border-gray-100" />;
+  // যতক্ষণ না কম্পোনেন্টটি মাউন্ট হচ্ছে অথবা সেশন লোড হচ্ছে, 
+  // ততক্ষণ সার্ভার ও ক্লায়েন্ট দুই জায়গাতেই এই সেম স্কেলিটন/প্লেসহোল্ডার লেআউট রেন্ডার হবে।
+  if (!mounted || isPending) {
+    return <nav className="h-16 w-full border-b border-gray-100 bg-white" />;
+  }
 
   return (
-    <nav className="sticky top-0 z-50 w-full border-b border-gray-100 bg-white/90 backdrop-blur-md">
+    <nav className="sticky top-0 z-50 w-full border-b border-gray-100 bg-white backdrop-blur-md">
       <div className="mx-auto flex h-16 max-w-7xl items-center justify-between px-4 sm:px-6 lg:px-8">
         {/* Logo - left */}
         <Link href="/" className="flex shrink-0 items-center gap-2">
@@ -92,7 +97,6 @@ export default function Navbar() {
             </>
           ) : (
             <div className="flex items-center gap-4 pl-2">
-              {/* FIX: অবতার এবং টেক্সট একসাথে, ক্লিক করলে সরাসরি /dashboard এ নিয়ে যাবে */}
               <Link 
                 href="/dashboard" 
                 className={`flex items-center gap-2 rounded-md px-3 py-1.5 text-sm font-medium transition-colors ${
@@ -164,7 +168,6 @@ export default function Navbar() {
               </>
             ) : (
               <div className="flex flex-col gap-2">
-                {/* FIX: মোবাইল মেনুতেও অবতার সহ ড্যাশবোর্ড বাটন */}
                 <Link
                   href="/dashboard"
                   onClick={() => setMobileOpen(false)}
