@@ -1,11 +1,11 @@
 // src/types/goal.ts
 
 export interface GoalFormData {
-  title: string;
-  targetRole: string;
-  description: string;
-  dueDate: string;
-  priority: "low" | "medium" | "high";
+  title: string;              // e.g. "Data Scientist"
+  description: string;        // overview of the role
+  requiredSkills: string[];   // e.g. ["Python", "SQL", "Statistics"]
+  salaryRange: string;        // e.g. "$70k - $100k"
+  estimatedTime: string;      // e.g. "6-8 months"
   imageUrl: string;
 }
 
