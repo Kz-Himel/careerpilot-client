@@ -21,7 +21,7 @@ interface GoalResponse {
 }
 
 async function fetchGoalById(id: string): Promise<Goal> {
-  const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/goals/${id}`);
+  const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/goals/${id}`);
   const data: GoalResponse & { message?: string } = await res.json();
 
   if (!res.ok || !data.success) {

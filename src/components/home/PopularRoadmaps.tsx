@@ -3,16 +3,26 @@
 
 import { motion } from "framer-motion";
 import Link from "next/link";
-import { FiCode, FiDatabase, FiFigma, FiServer } from "react-icons/fi";
+import { useQuery } from "@tanstack/react-query";
+import GoalCard, { GoalCardSkeleton } from "@/components/explore/GoalCard";
+import type { Goal } from "@/types/goal";
 
-const roadmaps = [
-  { title: "Frontend Developer", demand: "High Demand", salary: "$80k - $120k", level: "Beginner Friendly", icon: FiCode, color: "bg-blue-50 text-blue-600" },
-  { title: "Full Stack Developer", demand: "High Demand", salary: "$90k - $130k", level: "Intermediate", icon: FiServer, color: "bg-green-50 text-green-600" },
-  { title: "UI/UX Designer", demand: "High Demand", salary: "$70k - $110k", level: "Beginner Friendly", icon: FiFigma, color: "bg-purple-50 text-purple-600" },
-  { title: "Data Analyst", demand: "High Demand", salary: "$70k - $100k", level: "Beginner Friendly", icon: FiDatabase, color: "bg-amber-50 text-amber-600" },
-];
+async function fetchPopularGoals(): Promise<Goal[]> {
+  const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/goals/popular`);
+  const data = await res.json();
+
+  if (!res.ok || !data.success) {
+    throw new Error(data.message || "Failed to load popular goals");
+  }
+  return data.data;
+}
 
 export default function PopularRoadmaps() {
+  const { data: goals, isLoading, isError } = useQuery({
+    queryKey: ["popular-goals"],
+    queryFn: fetchPopularGoals,
+  });
+
   return (
     <section className="px-4 py-12 sm:px-6 sm:py-16 lg:px-8">
       <div className="mx-auto max-w-7xl">
@@ -25,10 +35,10 @@ export default function PopularRoadmaps() {
         >
           <div>
             <h2 className="text-2xl font-bold text-gray-900 sm:text-3xl">
-              Explore Popular Career Paths
+              Explore Popular Career Goals
             </h2>
             <p className="mt-1 text-sm text-gray-500">
-              Discover career paths and start your journey today.
+              See what career goals other learners are working toward.
             </p>
           </div>
           <Link href="/explore" className="text-sm font-semibold text-blue-600 hover:underline">
@@ -36,40 +46,32 @@ export default function PopularRoadmaps() {
           </Link>
         </motion.div>
 
+        {isError && (
+          <p className="text-center text-sm text-red-500">Failed to load career goals.</p>
+        )}
+
         <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-4">
-          {roadmaps.map((item, i) => {
-            const Icon = item.icon;
-            return (
+          {isLoading &&
+            Array.from({ length: 4 }).map((_, i) => <GoalCardSkeleton key={i} />)}
+
+          {!isLoading &&
+            goals?.map((goal, i) => (
               <motion.div
-                key={item.title}
+                key={goal._id}
                 initial={{ opacity: 0, y: 24 }}
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true }}
                 transition={{ duration: 0.4, delay: i * 0.1 }}
                 whileHover={{ y: -4 }}
-                className="flex flex-col rounded-2xl border border-gray-100 bg-white p-4 shadow-sm transition-shadow hover:shadow-md sm:p-5"
               >
-                <div className={`mb-3 flex h-10 w-10 items-center justify-center rounded-xl ${item.color}`}>
-                  <Icon className="h-5 w-5" />
-                </div>
-                <h3 className="mb-1 text-sm font-semibold text-gray-900 sm:text-base">
-                  {item.title}
-                </h3>
-                <span className="mb-2 w-fit rounded-full bg-green-50 px-2 py-0.5 text-[11px] font-medium text-green-600">
-                  {item.demand}
-                </span>
-                <p className="mb-1 text-xs text-gray-500 sm:text-sm">{item.salary}</p>
-                <p className="mb-4 text-xs text-gray-400">{item.level}</p>
-                <Link
-                  href="/explore"
-                  className="mt-auto min-h-[38px] rounded-lg border border-gray-200 py-2 text-center text-xs font-medium text-gray-700 transition-colors active:bg-gray-50 sm:hover:bg-gray-50"
-                >
-                  View Details
-                </Link>
+                <GoalCard goal={goal} />
               </motion.div>
-            );
-          })}
+            ))}
         </div>
+
+        {!isLoading && goals?.length === 0 && (
+          <p className="text-center text-sm text-gray-400">No career goals yet.</p>
+        )}
       </div>
     </section>
   );
