@@ -175,23 +175,23 @@ export default function AIRoadmapPage() {
           <div>
             <label className="form-label">Use a Saved Goal as Context (Optional)</label>
             <div className="relative">
-              <FiBookmark className="pointer-events-none absolute left-3.5 top-1/2 h-4 w-4 -translate-y-1/2 text-slate-400" />
+              <FiBookmark className="pointer-events-none absolute left-3.5 top-1/2 h-4 w-4 -translate-y-1/2 text-slate-400 z-10" />
               <select
                 value={form.savedGuideId || ""}
                 onChange={(e) => handleSavedGuideChange(e.target.value)}
-                className="form-select pl-10"
+                className="form-select pl-11 relative bg-white"
               >
-                <option value="">&nbsp; -- Select from your saved goals --</option>
+                <option value="">Select from your saved goals</option>
                 {isLoadingGuides ? (
-                  <option disabled value="">&nbsp; Loading saved goals...</option>
+                  <option disabled value="">Loading saved goals...</option>
                 ) : savedGuides && savedGuides.length > 0 ? (
                   savedGuides.map((guide) => (
                     <option key={guide._id} value={guide._id}>
-                      &nbsp; {guide.title}
+                      {guide.title}
                     </option>
                   ))
                 ) : (
-                  <option disabled value="">&nbsp; No saved goals found</option>
+                  <option disabled value="">No saved goals found</option>
                 )}
               </select>
             </div>
@@ -200,14 +200,14 @@ export default function AIRoadmapPage() {
           <div>
             <label className="form-label">I want to become</label>
             <div className="relative">
-              <FiTarget className="pointer-events-none absolute left-3.5 top-1/2 h-4 w-4 -translate-y-1/2 text-slate-400" />
+              <FiTarget className="pointer-events-none absolute left-3.5 top-1/2 h-4 w-4 -translate-y-1/2 text-slate-400 z-10" />
               <input
                 type="text"
                 value={form.targetRole}
                 onChange={(e) => setForm((p) => ({ ...p, targetRole: e.target.value }))}
                 placeholder="Frontend Developer"
                 required
-                className="form-input-icon"
+                className="form-input-icon pl-11"
               />
             </div>
           </div>
@@ -215,13 +215,13 @@ export default function AIRoadmapPage() {
           <div>
             <label className="form-label">Current Role</label>
             <div className="relative">
-              <FiBriefcase className="pointer-events-none absolute left-3.5 top-1/2 h-4 w-4 -translate-y-1/2 text-slate-400" />
+              <FiBriefcase className="pointer-events-none absolute left-3.5 top-1/2 h-4 w-4 -translate-y-1/2 text-slate-400 z-10" />
               <input
                 type="text"
                 value={form.currentRole}
                 onChange={(e) => setForm((p) => ({ ...p, currentRole: e.target.value }))}
                 placeholder="Student, Junior Developer, etc."
-                className="form-input-icon"
+                className="form-input-icon pl-11"
               />
             </div>
           </div>
@@ -229,17 +229,17 @@ export default function AIRoadmapPage() {
           <div>
             <label className="form-label">My Experience Level</label>
             <div className="relative">
-              <FiBarChart2 className="pointer-events-none absolute left-3.5 top-1/2 h-4 w-4 -translate-y-1/2 text-slate-400" />
+              <FiBarChart2 className="pointer-events-none absolute left-3.5 top-1/2 h-4 w-4 -translate-y-1/2 text-slate-400 z-10" />
               <select
                 value={form.experienceLevel}
                 onChange={(e) =>
                   setForm((p) => ({ ...p, experienceLevel: e.target.value as ExtendedRoadmapFormInput["experienceLevel"] }))
                 }
-                className="form-select pl-10"
+                className="form-select pl-11 relative bg-white"
               >
-                <option value="beginner">&nbsp; Beginner</option>
-                <option value="intermediate">&nbsp; Intermediate</option>
-                <option value="advanced">&nbsp; Advanced</option>
+                <option value="beginner">Beginner</option>
+                <option value="intermediate">Intermediate</option>
+                <option value="advanced">Advanced</option>
               </select>
             </div>
           </div>
@@ -247,7 +247,7 @@ export default function AIRoadmapPage() {
           <div>
             <label className="form-label">Roadmap Length</label>
             <div className="relative">
-              <FiCalendar className="pointer-events-none absolute left-3.5 top-1/2 h-4 w-4 -translate-y-1/2 text-slate-400" />
+              <FiCalendar className="pointer-events-none absolute left-3.5 top-1/2 h-4 w-4 -translate-y-1/2 text-slate-400 z-10" />
               <select
                 value={form.desiredDurationMonths}
                 onChange={(e) =>
@@ -256,11 +256,11 @@ export default function AIRoadmapPage() {
                     desiredDurationMonths: Number(e.target.value) as ExtendedRoadmapFormInput["desiredDurationMonths"],
                   }))
                 }
-                className="form-select pl-10"
+                className="form-select pl-11 relative bg-white"
               >
-                <option value={3}>&nbsp; 3 Months (Quick Start)</option>
-                <option value={6}>&nbsp; 6 Months (Standard)</option>
-                <option value={12}>&nbsp; 12 Months (In-Depth)</option>
+                <option value={3}>3 Months (Quick Start)</option>
+                <option value={6}>6 Months (Standard)</option>
+                <option value={12}>12 Months (In-Depth)</option>
               </select>
             </div>
           </div>
@@ -294,9 +294,9 @@ export default function AIRoadmapPage() {
               <button
                 type="button"
                 onClick={addSkill}
-                className="btn btn-secondary btn-md h-[44px] w-[44px] rounded-xl p-0"
+                className="btn btn-secondary flex items-center justify-center h-[44px] w-[44px] rounded-xl p-0 shrink-0"
               >
-                <FiPlus className="h-4 w-4" />
+                <FiPlus className="h-5.5 w-5.5 text-slate-600" />
               </button>
             </div>
           </div>
@@ -304,18 +304,18 @@ export default function AIRoadmapPage() {
           <div>
             <label className="form-label">Weekly Study Hours</label>
             <div className="relative">
-              <FiClock className="pointer-events-none absolute left-3.5 top-1/2 h-4 w-4 -translate-y-1/2 text-slate-400" />
+              <FiClock className="pointer-events-none absolute left-3.5 top-1/2 h-4 w-4 -translate-y-1/2 text-slate-400 z-10" />
               <select
                 value={form.weeklyStudyHours}
                 onChange={(e) =>
                   setForm((p) => ({ ...p, weeklyStudyHours: Number(e.target.value) }))
                 }
-                className="form-select pl-10"
+                className="form-select pl-11 relative bg-white"
               >
-                <option value={5}>&nbsp; 5 hrs</option>
-                <option value={10}>&nbsp; 10 hrs</option>
-                <option value={15}>&nbsp; 15 hrs</option>
-                <option value={20}>&nbsp; 20+ hrs</option>
+                <option value={5}>5 hrs</option>
+                <option value={10}>10 hrs</option>
+                <option value={15}>15 hrs</option>
+                <option value={20}>20+ hrs</option>
               </select>
             </div>
           </div>

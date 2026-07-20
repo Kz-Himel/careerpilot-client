@@ -132,7 +132,7 @@ export default function FeaturesPage() {
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
             transition={{ duration: 0.5 }}
-            className="mx-auto flex max-w-4xl flex-col items-center gap-4 rounded-2xl bg-blue-600 px-6 py-10 text-center sm:py-12"
+            className="mx-auto flex max-w-4xl flex-col items-center gap-4 rounded-2xl bg-purple-700 px-6 py-10 text-center sm:py-12"
           >
             <h2 className="text-2xl font-bold text-white sm:text-3xl">
               Ready to Start Your Journey?
