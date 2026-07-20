@@ -1,36 +1,169 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# 🚀 CareerPilot AI 
 
-## Getting Started
+An AI-powered career planning platform built with Next.js, React, TypeScript, Tailwind CSS, and HeroUI.
 
-First, run the development server:
+---
+
+## 🌐 Live Demo
+
+Frontend:
+https://careerpilot-client-kzhimel.vercel.app/  
+
+Server repo:  
+https://github.com/Kz-Himel/careerpilot-server  
+
+Backend API:
+https://careerpilot-server-kzhimel.vercel.app/
+
+---
+
+# ✨ Features
+
+- AI Career Roadmap Generator
+- Career Goal Management
+- Authentication
+- Dashboard
+- Saved Roadmaps
+- Analytics
+- Responsive Design
+- Protected Routes
+- Modern UI
+- Dark Mode
+
+---
+
+# 🛠 Tech Stack
+
+- Next.js
+- React
+- TypeScript
+- Tailwind CSS
+- HeroUI
+- TanStack Query
+- React Hook Form
+- React Hot Toast
+- Recharts
+- Lucide React
+
+---
+
+# 📂 Folder Structure
+
+```
+src/
+│
+├── app
+├── components
+├── hooks
+├── providers
+├── services
+├── types
+├── utils
+├── lib
+└── assets
+```
+
+---
+
+# ⚙️ Environment Variables
+
+Create a `.env.local`
+
+```env
+NEXT_PUBLIC_API_URL=
+
+NEXT_PUBLIC_APP_URL=
+
+NEXT_PUBLIC_BETTER_AUTH_URL=
+```
+
+---
+
+# 🚀 Installation
+
+Clone Repository
+
+```bash
+git clone https://github.com/your-username/careerpilot-client.git
+```
+
+Go to Project
+
+```bash
+cd careerpilot-client
+```
+
+Install Packages
+
+```bash
+npm install
+```
+
+Run Development Server
 
 ```bash
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+Build Production
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+```bash
+npm run build
+```
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+---
 
-## Learn More
+# 📱 Pages
 
-To learn more about Next.js, take a look at the following resources:
+- Home
+- Login
+- Register
+- Dashboard
+- My Goals
+- Goal Details
+- AI Roadmap Generator
+- Saved Roadmaps
+- Profile
+- Analytics
+- 404 Page
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+---
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+# 🔐 Authentication
 
-## Deploy on Vercel
+- Better Auth
+- Protected Routes
+- Session Management
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+---
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+# 📊 Dashboard
+
+- Goal Statistics
+- Progress Chart
+- Saved Roadmaps
+- Analytics Cards
+
+---
+
+# 📸 Screenshots
+
+- Home
+- Dashboard
+- AI Roadmap
+- Goal Management
+
+(Add your screenshots here)
+
+---
+
+# 👨‍💻 Author
+
+Khayruzzaman Himel
+
+GitHub:
+https://github.com/Kz-Himel
+
+---
+
+# ⭐ Star this repository if you like it.
