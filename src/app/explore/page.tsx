@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import { useQuery } from "@tanstack/react-query";
+import { motion, AnimatePresence } from "framer-motion";
 import {
   FiSearch,
   FiTarget,
@@ -59,22 +60,48 @@ export default function ExplorePage() {
   const resetPage = () => setPage(1);
 
   return (
-    <div className="mx-auto max-w-7xl">
-      <div className="mx-auto max-w-7xl">
-        {/* Header */}
-        <div className="section-header flex flex-col items-center text-center mx-auto">
-          <span className="eyebrow mb-3 w-fit">Discover</span>
-          <h1 className="heading-page">Explore Career Goals</h1>
-          <p className="text-body max-w-xl">
-            See what career goals other learners are working toward.
-          </p>
+    <main className="min-h-screen bg-slate-50/50 py-12 sm:py-16">
+      <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+        
+        {/* Header Section */}
+        <div className="mx-auto max-w-3xl text-center mb-10 sm:mb-12">
+          <motion.span
+            initial={{ opacity: 0, y: 10 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.5 }}
+            className="mb-4 inline-block rounded-full bg-blue-50 px-3 py-1.5 text-xs font-medium text-blue-700"
+          >
+            Discover
+          </motion.span>
+          <motion.h1
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.5, delay: 0.1 }}
+            className="text-3xl font-bold text-gray-900 sm:text-4xl"
+          >
+            Explore Career Goals
+          </motion.h1>
+          <motion.p
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.5, delay: 0.2 }}
+            className="mt-4 text-sm leading-relaxed text-gray-500 sm:text-base"
+          >
+            See what career goals other learners are working toward and build your own momentum.
+          </motion.p>
         </div>
 
-        {/* Search + Filters - single line, premium look */}
-        <div className="card mb-8 p-3 sm:p-4">
-          <div className="flex flex-col gap-3 lg:flex-row lg:items-center lg:gap-3 lg:flex-nowrap">
-            <div className="relative flex-1 lg:min-w-[220px]">
-              <FiSearch className="pointer-events-none absolute left-3.5 top-1/2 h-4 w-4 -translate-y-1/2 text-slate-400" />
+        {/* Search + Filters Bar */}
+        <motion.div 
+          initial={{ opacity: 0, y: 15 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.4, delay: 0.25 }}
+          className="rounded-2xl border border-gray-100 bg-white p-4 shadow-sm mb-8 sm:p-5"
+        >
+          <div className="flex flex-col gap-4 lg:flex-row lg:items-center lg:flex-nowrap">
+            {/* Search Input Container */}
+            <div className="relative flex-1 lg:min-w-[280px]">
+              <FiSearch className="pointer-events-none absolute left-4 top-1/2 h-4 w-4 -translate-y-1/2 text-gray-400" />
               <input
                 type="text"
                 value={search}
@@ -83,42 +110,47 @@ export default function ExplorePage() {
                   resetPage();
                 }}
                 placeholder="Search by title or role..."
-                className="form-input-icon w-full border-slate-200 bg-slate-50/60 transition-colors focus:bg-white"
+                className="w-full rounded-xl border border-gray-100 bg-gray-50/60 py-2.5 pl-11 pr-4 text-sm text-gray-900 transition-all placeholder:text-gray-400 focus:border-blue-500/30 focus:bg-white focus:outline-none focus:ring-4 focus:ring-blue-500/5"
               />
             </div>
 
-            <div className="hidden h-9 w-px bg-slate-200 lg:block" />
+            {/* Divider Line (Desktop only) */}
+            <div className="hidden h-8 w-px bg-gray-100 lg:block" />
 
-            <div className="flex items-center gap-2 text-slate-400 lg:hidden">
+            {/* Mobile Filters Label */}
+            <div className="flex items-center gap-2 text-gray-400 lg:hidden">
               <FiSliders className="h-4 w-4" />
-              <span className="text-xs font-semibold uppercase tracking-wide">Filters</span>
+              <span className="text-xs font-semibold uppercase tracking-wider">Filters</span>
             </div>
 
-            <div className="grid grid-cols-1 gap-3 sm:grid-cols-3 lg:flex lg:flex-1 lg:flex-nowrap lg:gap-3">
+            {/* Interactive Selectors Dropdowns */}
+            <div className="grid grid-cols-1 gap-3 sm:grid-cols-3 lg:flex lg:flex-1 lg:flex-nowrap lg:gap-4">
               <select
                 value={priority}
                 onChange={(e) => {
                   setPriority(e.target.value);
                   resetPage();
                 }}
-                className="form-select border-slate-200 bg-slate-50/60 transition-colors focus:bg-white lg:w-40"
+                className="w-full rounded-xl border border-gray-100 bg-gray-50/60 px-4 py-2.5 text-sm text-gray-700 transition-all focus:border-blue-500/30 focus:bg-white focus:outline-none focus:ring-4 focus:ring-blue-500/5 lg:w-44"
               >
                 <option value="">All Priorities</option>
-                <option value="high">High</option>
-                <option value="medium">Medium</option>
-                <option value="low">Low</option>
+                <option value="high">High Priority</option>
+                <option value="medium">Medium Priority</option>
+                <option value="low">Low Priority</option>
               </select>
 
-              <input
-                type="text"
-                value={targetRole}
-                onChange={(e) => {
-                  setTargetRole(e.target.value);
-                  resetPage();
-                }}
-                placeholder="Filter by role..."
-                className="form-input border-slate-200 bg-slate-50/60 transition-colors focus:bg-white lg:w-44"
-              />
+              <div className="relative flex-1">
+                <input
+                  type="text"
+                  value={targetRole}
+                  onChange={(e) => {
+                    setTargetRole(e.target.value);
+                    resetPage();
+                  }}
+                  placeholder="Filter by role..."
+                  className="w-full rounded-xl border border-gray-100 bg-gray-50/60 px-4 py-2.5 text-sm text-gray-700 transition-all placeholder:text-gray-400 focus:border-blue-500/30 focus:bg-white focus:outline-none focus:ring-4 focus:ring-blue-500/5"
+                />
+              </div>
 
               <select
                 value={sort}
@@ -126,7 +158,7 @@ export default function ExplorePage() {
                   setSort(e.target.value);
                   resetPage();
                 }}
-                className="form-select border-slate-200 bg-slate-50/60 transition-colors focus:bg-white lg:w-40"
+                className="w-full rounded-xl border border-gray-100 bg-gray-50/60 px-4 py-2.5 text-sm text-gray-700 transition-all focus:border-blue-500/30 focus:bg-white focus:outline-none focus:ring-4 focus:ring-blue-500/5 lg:w-44"
               >
                 <option value="newest">Newest First</option>
                 <option value="oldest">Oldest First</option>
@@ -134,63 +166,94 @@ export default function ExplorePage() {
               </select>
             </div>
           </div>
-        </div>
+        </motion.div>
 
+        {/* Error Handling State */}
         {isError && (
-          <div className="alert alert-error mb-6">
-            <FiAlertCircle className="mt-0.5 h-4 w-4 shrink-0" />
+          <motion.div 
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            className="flex items-center gap-3 rounded-xl border border-red-100 bg-red-50 p-4 text-sm text-red-600 mb-8"
+          >
+            <FiAlertCircle className="h-5 w-5 shrink-0" />
             <span>{(error as Error).message}</span>
-          </div>
+          </motion.div>
         )}
 
+        {/* Loading Skeleton States Grid */}
         {isLoading && (
-          <div className="grid grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-4">
+          <div className="grid grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
             {Array.from({ length: 8 }).map((_, i) => (
               <GoalCardSkeleton key={i} />
             ))}
           </div>
         )}
 
-        {!isLoading && data?.data.length === 0 && (
-          <div className="empty-state">
-            <div className="mb-4 flex h-14 w-14 items-center justify-center rounded-2xl bg-slate-100">
-              <FiTarget className="h-7 w-7 text-slate-300" />
-            </div>
-            <p className="text-sm font-semibold text-slate-700">No goals found</p>
-            <p className="mt-1 text-xs text-slate-400">Try adjusting your search or filters.</p>
-          </div>
-        )}
+        {/* Main Content Layout Block */}
+        <AnimatePresence mode="wait">
+          {!isLoading && data?.data.length === 0 && (
+            <motion.div
+              initial={{ opacity: 0, scale: 0.95 }}
+              animate={{ opacity: 1, scale: 1 }}
+              exit={{ opacity: 0, scale: 0.95 }}
+              className="flex flex-col items-center justify-center rounded-2xl border border-dashed border-gray-200 bg-white py-16 px-4 text-center"
+            >
+              <div className="mb-4 flex h-14 w-14 items-center justify-center rounded-2xl bg-gray-50 text-gray-400">
+                <FiTarget className="h-6 w-6" />
+              </div>
+              <h3 className="text-base font-bold text-gray-900 sm:text-lg">No goals found</h3>
+              <p className="mt-1 max-w-xs text-sm text-gray-400">
+                We couldn't find matches. Try modifying your key search terms or filters.
+              </p>
+            </motion.div>
+          )}
 
-        {!isLoading && data && data.data.length > 0 && (
-          <>
-            <div className="grid grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-4">
-              {data.data.map((goal) => (
-                <GoalCard key={goal._id} goal={goal} />
-              ))}
-            </div>
+          {!isLoading && data && data.data.length > 0 && (
+            <motion.div
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+            >
+              {/* Product Cards Responsive Auto Grid */}
+              <div className="grid grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
+                {data.data.map((goal, i) => (
+                  <motion.div
+                    key={goal._id}
+                    initial={{ opacity: 0, y: 16 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    transition={{ duration: 0.35, delay: i * 0.04 }}
+                    whileHover={{ y: -4 }}
+                    className="h-full transition-shadow duration-300"
+                  >
+                    <GoalCard goal={goal} />
+                  </motion.div>
+                ))}
+              </div>
 
-            <div className="mt-10 flex items-center justify-center gap-4">
-              <button
-                onClick={() => setPage((p) => Math.max(1, p - 1))}
-                disabled={page === 1}
-                className="btn btn-secondary btn-sm h-10 w-10 rounded-xl p-0 disabled:opacity-40"
-              >
-                <FiChevronLeft className="h-4 w-4" />
-              </button>
-              <span className="text-sm font-medium text-slate-600">
-                Page {data.page} of {data.totalPages || 1}
-              </span>
-              <button
-                onClick={() => setPage((p) => Math.min(data.totalPages, p + 1))}
-                disabled={page >= data.totalPages}
-                className="btn btn-secondary btn-sm h-10 w-10 rounded-xl p-0 disabled:opacity-40"
-              >
-                <FiChevronRight className="h-4 w-4" />
-              </button>
-            </div>
-          </>
-        )}
+              {/* Navigation Dynamic Pagination Controls */}
+              <div className="mt-12 flex items-center justify-center gap-5">
+                <button
+                  onClick={() => setPage((p) => Math.max(1, p - 1))}
+                  disabled={page === 1}
+                  className="flex h-10 w-10 items-center justify-center rounded-xl border border-gray-100 bg-white text-gray-600 shadow-sm transition-all hover:bg-gray-50 hover:text-gray-900 disabled:opacity-40 disabled:hover:bg-white"
+                >
+                  <FiChevronLeft className="h-5 w-5" />
+                </button>
+                <span className="text-sm font-semibold text-gray-600">
+                  Page {data.page} of {data.totalPages || 1}
+                </span>
+                <button
+                  onClick={() => setPage((p) => Math.min(data.totalPages, p + 1))}
+                  disabled={page >= data.totalPages}
+                  className="flex h-10 w-10 items-center justify-center rounded-xl border border-gray-100 bg-white text-gray-600 shadow-sm transition-all hover:bg-gray-50 hover:text-gray-900 disabled:opacity-40 disabled:hover:bg-white"
+                >
+                  <FiChevronRight className="h-5 w-5" />
+                </button>
+              </div>
+            </motion.div>
+          )}
+        </AnimatePresence>
       </div>
-    </div>
+    </main>
   );
 }

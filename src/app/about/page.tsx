@@ -38,25 +38,27 @@ export default function AboutPage() {
   return (
     <main>
       {/* Hero */}
-      <section className="bg-white mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-        <div className="mx-auto max-w-3xl text-center">
-          <motion.h1
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.5 }}
-            className="text-3xl font-bold text-gray-900 sm:text-4xl"
-          >
-            About CareerPilot AI
-          </motion.h1>
-          <motion.p
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.5, delay: 0.1 }}
-            className="mt-4 text-sm leading-relaxed text-gray-500 sm:text-base"
-          >
-            We're on a mission to make quality career guidance accessible to everyone through the
-            power of AI.
-          </motion.p>
+      <section className="bg-white py-12 sm:py-16">
+        <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+          <div className="mx-auto max-w-3xl text-center">
+            <motion.h1
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.5 }}
+              className="text-3xl font-bold text-gray-900 sm:text-4xl"
+            >
+              About CareerPilot AI
+            </motion.h1>
+            <motion.p
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.5, delay: 0.1 }}
+              className="mt-4 text-sm leading-relaxed text-gray-500 sm:text-base"
+            >
+              We're on a mission to make quality career guidance accessible to everyone through the
+              power of AI.
+            </motion.p>
+          </div>
         </div>
       </section>
 
