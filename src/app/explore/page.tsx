@@ -60,7 +60,7 @@ export default function ExplorePage() {
   const resetPage = () => setPage(1);
 
   return (
-    <main className="min-h-screen bg-slate-50/50 py-12 sm:py-16">
+    <main className="min-h-screen bg-slate-50/50 px-8 py-12 sm:py-16">
       <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
         
         {/* Header Section */}

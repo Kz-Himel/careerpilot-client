@@ -63,14 +63,14 @@ export default function AboutPage() {
       </section>
 
       {/* Stats */}
-      <section className="pb-12">
+      <section className="pb-12 sm:pb-16">
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
             transition={{ duration: 0.5 }}
-            className="mx-auto grid max-w-4xl grid-cols-2 gap-4 rounded-2xl border border-gray-100 bg-white p-6 shadow-sm sm:grid-cols-4 sm:p-8"
+            className="mx-auto grid max-w-4xl grid-cols-2 gap-6 rounded-2xl border border-gray-100 bg-white p-6 shadow-sm sm:grid-cols-4 sm:p-8"
           >
             {stats.map((stat) => (
               <div key={stat.label} className="text-center">
@@ -85,7 +85,7 @@ export default function AboutPage() {
       {/* Mission */}
       <section className="pb-12 sm:pb-16">
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-          <div className="mx-auto grid max-w-6xl grid-cols-1 items-center gap-8 lg:grid-cols-2 lg:gap-12">
+          <div className="mx-auto grid max-w-6xl grid-cols-1 items-center gap-6 lg:grid-cols-2 lg:gap-12">
             <motion.div
               initial={{ opacity: 0, x: -20 }}
               whileInView={{ opacity: 1, x: 0 }}
@@ -111,7 +111,7 @@ export default function AboutPage() {
               transition={{ duration: 0.5, delay: 0.1 }}
               className="flex items-center justify-center"
             >
-              <div className="flex h-56 w-56 items-center justify-center rounded-3xl bg-blue-50 sm:h-64 sm:w-64">
+              <div className="flex h-56 w-56 items-center justify-center rounded-2xl bg-blue-50 sm:h-64 sm:w-64">
                 <span className="text-6xl">🎯</span>
               </div>
             </motion.div>
@@ -120,7 +120,7 @@ export default function AboutPage() {
       </section>
 
       {/* Values */}
-      <section className="bg-gray-50 py-12 sm:py-16">
+      <section className="pb-12 sm:pb-16">
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
           <div className="mx-auto max-w-6xl">
             <motion.h2
@@ -133,7 +133,7 @@ export default function AboutPage() {
               What We Value
             </motion.h2>
 
-            <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-4">
+            <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-4">
               {values.map((value, i) => {
                 const Icon = value.icon;
                 return (
@@ -142,16 +142,17 @@ export default function AboutPage() {
                     initial={{ opacity: 0, y: 24 }}
                     whileInView={{ opacity: 1, y: 0 }}
                     viewport={{ once: true }}
-                    transition={{ duration: 0.4, delay: i * 0.1 }}
-                    className="rounded-2xl border border-gray-100 bg-white p-5 shadow-sm sm:p-6"
+                    transition={{ duration: 0.4, delay: i * 0.08 }}
+                    whileHover={{ y: -4 }}
+                    className="flex flex-col rounded-2xl border border-gray-100 bg-white p-5 shadow-sm transition-shadow hover:shadow-md sm:p-6"
                   >
-                    <div className="mb-3 flex h-11 w-11 items-center justify-center rounded-xl bg-blue-50 text-blue-600">
-                      <Icon className="h-5 w-5" />
+                    <div className="mb-4 flex h-11 w-11 items-center justify-center rounded-xl bg-blue-50 text-blue-600 sm:h-12 sm:w-12">
+                      <Icon className="h-5 w-5 sm:h-6 sm:w-6" />
                     </div>
-                    <h3 className="mb-2 text-sm font-bold text-gray-900 sm:text-base">
+                    <h3 className="mb-2 text-base font-bold text-gray-900 sm:text-lg">
                       {value.title}
                     </h3>
-                    <p className="text-xs leading-relaxed text-gray-500 sm:text-sm">
+                    <p className="text-sm leading-relaxed text-gray-500">
                       {value.description}
                     </p>
                   </motion.div>

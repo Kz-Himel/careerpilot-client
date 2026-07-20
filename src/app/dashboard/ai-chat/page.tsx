@@ -190,25 +190,22 @@ export default function AIChatPage() {
         {messages?.map((msg, i) => (
           <div
             key={i}
-            className={`flex items-start gap-3 ${
-              msg.role === "user" ? "flex-row-reverse" : "flex-row"
-            }`}
+            className={`flex items-start gap-3 ${msg.role === "user" ? "flex-row-reverse" : "flex-row"
+              }`}
           >
             <div
-              className={`flex h-8 w-8 shrink-0 items-center justify-center rounded-full ${
-                msg.role === "user"
+              className={`flex h-8 w-8 shrink-0 items-center justify-center rounded-full ${msg.role === "user"
                   ? "bg-slate-100 text-slate-600"
                   : "bg-gradient-to-br from-indigo-50 to-violet-50 text-indigo-600"
-              }`}
+                }`}
             >
               {msg.role === "user" ? <FiUser className="h-4 w-4" /> : <FiCpu className="h-4 w-4" />}
             </div>
             <div
-              className={`max-w-[75%] rounded-2xl px-4 py-3 text-sm leading-relaxed sm:max-w-[70%] ${
-                msg.role === "user"
+              className={`max-w-[75%] rounded-2xl px-4 py-3 text-sm leading-relaxed sm:max-w-[70%] ${msg.role === "user"
                   ? "bg-gradient-to-r from-indigo-600 to-violet-600 text-white shadow-sm"
                   : "border border-slate-100 bg-slate-50 text-slate-700"
-              }`}
+                }`}
             >
               {msg.content}
             </div>
@@ -263,9 +260,9 @@ export default function AIChatPage() {
         <button
           onClick={() => handleSend()}
           disabled={sendMutation.isPending || !input.trim()}
-          className="btn btn-primary btn-md h-[44px] w-[44px] rounded-xl p-0"
+          className="btn btn-primary btn-md flex h-[44px] w-[44px] items-center justify-center rounded-xl p-0 transition-colors"
         >
-          <FiSend />
+          <FiSend className="h-5 w-5" />
         </button>
       </div>
     </div>
