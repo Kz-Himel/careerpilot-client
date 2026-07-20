@@ -44,7 +44,7 @@ export default function AboutPage() {
             <motion.h1
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.5 }}
+              transition={{ duration: 0.5, delay: 0.1 }}
               className="text-3xl font-bold text-gray-900 sm:text-4xl"
             >
               About CareerPilot AI
@@ -52,7 +52,7 @@ export default function AboutPage() {
             <motion.p
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.5, delay: 0.1 }}
+              transition={{ duration: 0.5, delay: 0.2 }}
               className="mt-4 text-sm leading-relaxed text-gray-500 sm:text-base"
             >
               We're on a mission to make quality career guidance accessible to everyone through the
@@ -70,7 +70,7 @@ export default function AboutPage() {
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
             transition={{ duration: 0.5 }}
-            className="mx-auto grid max-w-4xl grid-cols-2 gap-6 rounded-2xl border border-gray-100 bg-white p-6 shadow-sm sm:grid-cols-4 sm:p-8"
+            className="mx-auto grid max-w-4xl grid-cols-2 gap-4 rounded-2xl border border-gray-100 bg-white p-6 shadow-sm sm:grid-cols-4 sm:p-8"
           >
             {stats.map((stat) => (
               <div key={stat.label} className="text-center">
@@ -85,10 +85,10 @@ export default function AboutPage() {
       {/* Mission */}
       <section className="pb-12 sm:pb-16">
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-          <div className="mx-auto grid max-w-6xl grid-cols-1 items-center gap-6 lg:grid-cols-2 lg:gap-12">
+          <div className="mx-auto grid max-w-4xl grid-cols-1 items-center gap-4 lg:grid-cols-2 lg:gap-12">
             <motion.div
-              initial={{ opacity: 0, x: -20 }}
-              whileInView={{ opacity: 1, x: 0 }}
+              initial={{ opacity: 0, y: 24 }}
+              whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
               transition={{ duration: 0.5 }}
             >
@@ -99,16 +99,16 @@ export default function AboutPage() {
                 personal AI coach available anytime.
               </p>
               <p className="text-sm leading-relaxed text-gray-500 sm:text-base">
-                From generating step-by-step learning roadmaps to answering late-night "am I ready for
-                this job?" questions, we want to be the guide people actually needed but never had.
+                From generating step-by-step learning roadmaps to answering late-night &ldquo;am I ready for
+                this job?&rdquo; questions, we want to be the guide people actually needed but never had.
               </p>
             </motion.div>
 
             <motion.div
-              initial={{ opacity: 0, scale: 0.9 }}
-              whileInView={{ opacity: 1, scale: 1 }}
+              initial={{ opacity: 0, y: 24 }}
+              whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
-              transition={{ duration: 0.5, delay: 0.1 }}
+              transition={{ duration: 0.5, delay: 0.08 }}
               className="flex items-center justify-center"
             >
               <div className="flex h-56 w-56 items-center justify-center rounded-2xl bg-blue-50 sm:h-64 sm:w-64">
@@ -122,7 +122,7 @@ export default function AboutPage() {
       {/* Values */}
       <section className="pb-12 sm:pb-16">
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-          <div className="mx-auto max-w-6xl">
+          <div className="mx-auto max-w-4xl">
             <motion.h2
               initial={{ opacity: 0, y: 20 }}
               whileInView={{ opacity: 1, y: 0 }}
@@ -133,7 +133,7 @@ export default function AboutPage() {
               What We Value
             </motion.h2>
 
-            <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-4">
+            <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-4">
               {values.map((value, i) => {
                 const Icon = value.icon;
                 return (

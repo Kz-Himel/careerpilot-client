@@ -40,44 +40,54 @@ export default function FAQ() {
   };
 
   return (
-    <section className="section-alt">
+    <section className="pb-12 sm:pb-16">
       <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-        <div className="mx-auto max-w-3xl">
+        <div className="mx-auto max-w-4xl">
+          {/* Header */}
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
             transition={{ duration: 0.5 }}
-            className="section-header-center"
+            className="mb-8 text-center sm:mb-10"
           >
-            <span className="eyebrow mb-3">FAQ</span>
-            <h2 className="heading-section">Frequently Asked Questions</h2>
-            <p className="text-body">Everything you need to know before you start.</p>
+            <span className="mb-2 block text-xs font-semibold uppercase tracking-wider text-blue-600">
+              FAQ
+            </span>
+            <h2 className="text-2xl font-bold text-gray-900 sm:text-3xl">
+              Frequently Asked Questions
+            </h2>
+            <p className="mt-3 text-sm text-gray-500 sm:text-base">
+              Everything you need to know before you start.
+            </p>
           </motion.div>
 
-          <div className="flex flex-col gap-3">
+          {/* Accordion Wrapper */}
+          <div className="flex flex-col gap-4">
             {faqs.map((faq, index) => {
               const isOpen = openIndex === index;
               return (
                 <motion.div
                   key={faq.question}
-                  initial={{ opacity: 0, y: 16 }}
+                  initial={{ opacity: 0, y: 24 }}
                   whileInView={{ opacity: 1, y: 0 }}
                   viewport={{ once: true }}
-                  transition={{ duration: 0.4, delay: index * 0.05 }}
-                  className={`card overflow-hidden transition-shadow duration-200 ${isOpen ? "shadow-md ring-1 ring-indigo-100" : ""}`}
+                  transition={{ duration: 0.4, delay: index * 0.08 }}
+                  className="overflow-hidden rounded-2xl border border-gray-100 bg-white shadow-sm transition-shadow hover:shadow-md"
                 >
                   <button
                     onClick={() => toggle(index)}
-                    className="flex min-h-[56px] w-full items-center justify-between gap-4 px-5 py-4 text-left transition-colors hover:bg-slate-50/50"
+                    className="flex min-h-[46px] w-full items-center justify-between gap-4 p-5 text-left transition-colors hover:bg-gray-50/50 sm:p-6"
                   >
-                    <span className="text-sm font-semibold text-slate-900 sm:text-base">
+                    <span className="text-base font-bold text-gray-900">
                       {faq.question}
                     </span>
                     <motion.span
                       animate={{ rotate: isOpen ? 180 : 0 }}
                       transition={{ duration: 0.25 }}
-                      className={`flex h-8 w-8 shrink-0 items-center justify-center rounded-lg transition-colors ${isOpen ? "bg-indigo-50 text-indigo-600" : "bg-slate-100 text-slate-400"}`}
+                      className={`flex h-8 w-8 shrink-0 items-center justify-center rounded-lg transition-colors ${
+                        isOpen ? "bg-blue-50 text-blue-600" : "bg-gray-100 text-gray-400"
+                      }`}
                     >
                       <FiChevronDown className="h-4 w-4" />
                     </motion.span>
@@ -92,7 +102,7 @@ export default function FAQ() {
                         exit={{ height: 0, opacity: 0 }}
                         transition={{ duration: 0.3, ease: "easeInOut" }}
                       >
-                        <p className="border-t border-slate-100 px-5 pb-5 pt-4 text-sm leading-relaxed text-slate-500">
+                        <p className="border-t border-gray-100 px-5 pb-5 pt-4 text-sm leading-relaxed text-gray-500 sm:px-6 sm:pb-6">
                           {faq.answer}
                         </p>
                       </motion.div>
