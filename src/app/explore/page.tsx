@@ -24,15 +24,13 @@ interface GoalsResponse {
 
 async function fetchExploreGoals(params: {
   search: string;
-  priority: string;
-  targetRole: string;
+  requiredSkills: string;
   sort: string;
   page: number;
 }): Promise<GoalsResponse> {
   const query = new URLSearchParams({
     search: params.search,
-    priority: params.priority,
-    targetRole: params.targetRole,
+    requiredSkills: params.requiredSkills,
     sort: params.sort,
     page: String(params.page),
     limit: "8",
@@ -47,14 +45,13 @@ async function fetchExploreGoals(params: {
 
 export default function ExplorePage() {
   const [search, setSearch] = useState("");
-  const [priority, setPriority] = useState("");
-  const [targetRole, setTargetRole] = useState("");
+  const [requiredSkills, setRequiredSkills] = useState(""); // স্টেট আপডেট করা হলো
   const [sort, setSort] = useState("newest");
   const [page, setPage] = useState(1);
 
   const { data, isLoading, isError, error } = useQuery({
-    queryKey: ["explore-goals", search, priority, targetRole, sort, page],
-    queryFn: () => fetchExploreGoals({ search, priority, targetRole, sort, page }),
+    queryKey: ["explore-goals", search, requiredSkills, sort, page],
+    queryFn: () => fetchExploreGoals({ search, requiredSkills, sort, page }),
   });
 
   const resetPage = () => setPage(1);
@@ -123,31 +120,19 @@ export default function ExplorePage() {
               <span className="text-xs font-semibold uppercase tracking-wider">Filters</span>
             </div>
 
-            {/* Interactive Selectors Dropdowns */}
-            <div className="grid grid-cols-1 gap-3 sm:grid-cols-3 lg:flex lg:flex-1 lg:flex-nowrap lg:gap-4">
-              <select
-                value={priority}
-                onChange={(e) => {
-                  setPriority(e.target.value);
-                  resetPage();
-                }}
-                className="w-full rounded-xl border border-gray-100 bg-gray-50/60 px-4 py-2.5 text-sm text-gray-700 transition-all focus:border-blue-500/30 focus:bg-white focus:outline-none focus:ring-4 focus:ring-blue-500/5 lg:w-44"
-              >
-                <option value="">All Priorities</option>
-                <option value="high">High Priority</option>
-                <option value="medium">Medium Priority</option>
-                <option value="low">Low Priority</option>
-              </select>
-
+            {/* Interactive Selectors Dropdowns*/}
+            <div className="grid grid-cols-1 gap-3 sm:grid-cols-2 lg:flex lg:flex-1 lg:flex-nowrap lg:gap-4">
+              
+              {/* 1: Skills Dropdown/Input */}
               <div className="relative flex-1">
                 <input
                   type="text"
-                  value={targetRole}
+                  value={requiredSkills}
                   onChange={(e) => {
-                    setTargetRole(e.target.value);
+                    setRequiredSkills(e.target.value);
                     resetPage();
                   }}
-                  placeholder="Filter by role..."
+                  placeholder="Filter by skill (e.g. React)..."
                   className="w-full rounded-xl border border-gray-100 bg-gray-50/60 px-4 py-2.5 text-sm text-gray-700 transition-all placeholder:text-gray-400 focus:border-blue-500/30 focus:bg-white focus:outline-none focus:ring-4 focus:ring-blue-500/5"
                 />
               </div>
@@ -162,7 +147,6 @@ export default function ExplorePage() {
               >
                 <option value="newest">Newest First</option>
                 <option value="oldest">Oldest First</option>
-                <option value="priority">By Priority</option>
               </select>
             </div>
           </div>
