@@ -34,11 +34,9 @@ export default function RootLayout({
       <body className="min-h-full flex flex-col font-sans text-slate-900">
         <Navbar />
         <main className="flex-1 bg-background">
-          <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-            <Providers>
-              {children}
-            </Providers>
-          </div>
+          <Providers>
+            {children}
+          </Providers>
         </main>
         <Footer />
         <ToastContainer

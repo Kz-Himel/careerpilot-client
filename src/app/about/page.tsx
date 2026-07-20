@@ -38,7 +38,7 @@ export default function AboutPage() {
   return (
     <main>
       {/* Hero */}
-      <section className="bg-white px-4 py-12 sm:px-6 sm:py-16 lg:px-8">
+      <section className="bg-white mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
         <div className="mx-auto max-w-3xl text-center">
           <motion.h1
             initial={{ opacity: 0, y: 20 }}
