@@ -24,4 +24,5 @@ export interface RoadmapFormInput {
   currentSkills: string[];
   weeklyStudyHours: number;
   experienceLevel: "beginner" | "intermediate" | "advanced";
+  desiredDurationMonths: 3 | 6 | 12;
 }
