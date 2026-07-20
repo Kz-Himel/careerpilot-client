@@ -137,7 +137,7 @@ export default function GoalDetailsPage() {
         </div>
 
         {/* Skills */}
-        <div className="card card-body h-fit">
+        <div className="card card-body h-fit mb-10">
           <p className="mb-4 flex items-center gap-2 text-sm font-semibold text-slate-900">
             <FiCheckCircle className="h-4 w-4 text-indigo-600" />
             Required Skills
