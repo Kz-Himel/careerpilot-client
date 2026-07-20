@@ -33,7 +33,7 @@ export default function PopularRoadmaps() {
           transition={{ duration: 0.5 }}
           className="section-header sm:flex-row sm:items-end sm:justify-between"
         >
-          <div>
+          <div className="flex items-center mx-auto">
             <span className="eyebrow mb-3">Trending</span>
             <h2 className="heading-section">Explore Popular Career Goals</h2>
             <p className="mt-2 text-body">

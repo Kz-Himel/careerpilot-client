@@ -61,7 +61,7 @@ export default function ExplorePage() {
     <div className="section">
       <div className="mx-auto max-w-7xl">
         {/* Header */}
-        <div className="section-header">
+        <div className="section-header items-center mx-auto">
           <span className="eyebrow mb-3 w-fit">Discover</span>
           <h1 className="heading-page">Explore Career Goals</h1>
           <p className="text-body max-w-xl">
