@@ -9,7 +9,7 @@ An AI-powered career planning platform built with Next.js, React, TypeScript, Ta
 Frontend:
 https://careerpilot-client-kzhimel.vercel.app/  
 
-Server repo:  
+Server repo: 
 https://github.com/Kz-Himel/careerpilot-server  
 
 Backend API:
