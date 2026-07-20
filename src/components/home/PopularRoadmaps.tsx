@@ -31,12 +31,12 @@ export default function PopularRoadmaps() {
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
           transition={{ duration: 0.5 }}
-          className="section-header sm:flex-row sm:items-end sm:justify-between"
+          className="section-header flex flex-col items-center text-center gap-4 sm:flex-row sm:justify-between sm:text-left"
         >
-          <div className="flex items-center mx-auto">
+          <div className="flex flex-col items-center text-center">
             <span className="eyebrow mb-3">Trending</span>
             <h2 className="heading-section">Explore Popular Career Goals</h2>
-            <p className="mt-2 text-body">
+            <p className="mt-2 text-body max-w-md">
               See what career goals other learners are working toward.
             </p>
           </div>

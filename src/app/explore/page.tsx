@@ -8,6 +8,7 @@ import {
   FiChevronLeft,
   FiChevronRight,
   FiAlertCircle,
+  FiSliders,
 } from "react-icons/fi";
 import type { Goal } from "@/types/goal";
 import GoalCard, { GoalCardSkeleton } from "@/components/explore/GoalCard";
@@ -61,7 +62,7 @@ export default function ExplorePage() {
     <div className="section">
       <div className="mx-auto max-w-7xl">
         {/* Header */}
-        <div className="section-header items-center mx-auto">
+        <div className="section-header flex flex-col items-center text-center mx-auto">
           <span className="eyebrow mb-3 w-fit">Discover</span>
           <h1 className="heading-page">Explore Career Goals</h1>
           <p className="text-body max-w-xl">
@@ -69,59 +70,70 @@ export default function ExplorePage() {
           </p>
         </div>
 
-        {/* Search + Filters */}
-        <div className="card mb-8 flex flex-col gap-3 p-4 sm:flex-row sm:flex-wrap sm:items-center sm:p-5">
-          <div className="relative flex-1 sm:min-w-[240px]">
-            <FiSearch className="pointer-events-none absolute left-3.5 top-1/2 h-4 w-4 -translate-y-1/2 text-slate-400" />
-            <input
-              type="text"
-              value={search}
-              onChange={(e) => {
-                setSearch(e.target.value);
-                resetPage();
-              }}
-              placeholder="Search by title or role..."
-              className="form-input-icon"
-            />
+        {/* Search + Filters - single line, premium look */}
+        <div className="card mb-8 p-3 sm:p-4">
+          <div className="flex flex-col gap-3 lg:flex-row lg:items-center lg:gap-3 lg:flex-nowrap">
+            <div className="relative flex-1 lg:min-w-[220px]">
+              <FiSearch className="pointer-events-none absolute left-3.5 top-1/2 h-4 w-4 -translate-y-1/2 text-slate-400" />
+              <input
+                type="text"
+                value={search}
+                onChange={(e) => {
+                  setSearch(e.target.value);
+                  resetPage();
+                }}
+                placeholder="Search by title or role..."
+                className="form-input-icon w-full border-slate-200 bg-slate-50/60 transition-colors focus:bg-white"
+              />
+            </div>
+
+            <div className="hidden h-9 w-px bg-slate-200 lg:block" />
+
+            <div className="flex items-center gap-2 text-slate-400 lg:hidden">
+              <FiSliders className="h-4 w-4" />
+              <span className="text-xs font-semibold uppercase tracking-wide">Filters</span>
+            </div>
+
+            <div className="grid grid-cols-1 gap-3 sm:grid-cols-3 lg:flex lg:flex-1 lg:flex-nowrap lg:gap-3">
+              <select
+                value={priority}
+                onChange={(e) => {
+                  setPriority(e.target.value);
+                  resetPage();
+                }}
+                className="form-select border-slate-200 bg-slate-50/60 transition-colors focus:bg-white lg:w-40"
+              >
+                <option value="">All Priorities</option>
+                <option value="high">High</option>
+                <option value="medium">Medium</option>
+                <option value="low">Low</option>
+              </select>
+
+              <input
+                type="text"
+                value={targetRole}
+                onChange={(e) => {
+                  setTargetRole(e.target.value);
+                  resetPage();
+                }}
+                placeholder="Filter by role..."
+                className="form-input border-slate-200 bg-slate-50/60 transition-colors focus:bg-white lg:w-44"
+              />
+
+              <select
+                value={sort}
+                onChange={(e) => {
+                  setSort(e.target.value);
+                  resetPage();
+                }}
+                className="form-select border-slate-200 bg-slate-50/60 transition-colors focus:bg-white lg:w-40"
+              >
+                <option value="newest">Newest First</option>
+                <option value="oldest">Oldest First</option>
+                <option value="priority">By Priority</option>
+              </select>
+            </div>
           </div>
-
-          <select
-            value={priority}
-            onChange={(e) => {
-              setPriority(e.target.value);
-              resetPage();
-            }}
-            className="form-select sm:w-44"
-          >
-            <option value="">All Priorities</option>
-            <option value="high">High</option>
-            <option value="medium">Medium</option>
-            <option value="low">Low</option>
-          </select>
-
-          <input
-            type="text"
-            value={targetRole}
-            onChange={(e) => {
-              setTargetRole(e.target.value);
-              resetPage();
-            }}
-            placeholder="Filter by role..."
-            className="form-input sm:w-48"
-          />
-
-          <select
-            value={sort}
-            onChange={(e) => {
-              setSort(e.target.value);
-              resetPage();
-            }}
-            className="form-select sm:w-44"
-          >
-            <option value="newest">Newest First</option>
-            <option value="oldest">Oldest First</option>
-            <option value="priority">By Priority</option>
-          </select>
         </div>
 
         {isError && (
