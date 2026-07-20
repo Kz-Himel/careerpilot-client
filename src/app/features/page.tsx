@@ -62,39 +62,41 @@ export default function FeaturesPage() {
   return (
     <main>
       {/* Hero */}
-      <section className="bg-white px-4 py-12 sm:px-6 sm:py-16 lg:px-8">
-        <div className="mx-auto max-w-3xl text-center">
-          <motion.span
-            initial={{ opacity: 0, y: 10 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.5 }}
-            className="mb-4 inline-block rounded-full bg-blue-50 px-3 py-1.5 text-xs font-medium text-blue-700"
-          >
-            Everything You Need
-          </motion.span>
-          <motion.h1
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.5, delay: 0.1 }}
-            className="text-3xl font-bold text-gray-900 sm:text-4xl"
-          >
-            Powerful Features to Guide Your Career
-          </motion.h1>
-          <motion.p
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.5, delay: 0.2 }}
-            className="mt-4 text-sm leading-relaxed text-gray-500 sm:text-base"
-          >
-            CareerPilot AI combines smart automation with real career guidance to help you go from
-            "where am I now" to "where I want to be."
-          </motion.p>
+      <section className="bg-white py-12 sm:py-16">
+        <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+          <div className="mx-auto max-w-3xl text-center">
+            <motion.span
+              initial={{ opacity: 0, y: 10 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.5 }}
+              className="mb-4 inline-block rounded-full bg-blue-50 px-3 py-1.5 text-xs font-medium text-blue-700"
+            >
+              Everything You Need
+            </motion.span>
+            <motion.h1
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.5, delay: 0.1 }}
+              className="text-3xl font-bold text-gray-900 sm:text-4xl"
+            >
+              Powerful Features to Guide Your Career
+            </motion.h1>
+            <motion.p
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.5, delay: 0.2 }}
+              className="mt-4 text-sm leading-relaxed text-gray-500 sm:text-base"
+            >
+              CareerPilot AI combines smart automation with real career guidance to help you go from
+              "where am I now" to "where I want to be."
+            </motion.p>
+          </div>
         </div>
       </section>
 
       {/* Features grid */}
-      <section className="px-4 pb-12 sm:px-6 sm:pb-16 lg:px-8">
-        <div className="mx-auto max-w-7xl">
+      <section className="pb-12 sm:pb-16">
+        <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
           <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3">
             {features.map((feature, i) => {
               const Icon = feature.icon;
@@ -123,28 +125,30 @@ export default function FeaturesPage() {
       </section>
 
       {/* CTA */}
-      <section className="px-4 pb-12 sm:px-6 sm:pb-16 lg:px-8">
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
-          transition={{ duration: 0.5 }}
-          className="mx-auto flex max-w-4xl flex-col items-center gap-4 rounded-2xl bg-blue-600 px-6 py-10 text-center sm:py-12"
-        >
-          <h2 className="text-2xl font-bold text-white sm:text-3xl">
-            Ready to Start Your Journey?
-          </h2>
-          <p className="max-w-md text-sm text-blue-100 sm:text-base">
-            Join thousands of learners already using CareerPilot AI to reach their dream careers.
-          </p>
-          <Link
-            href="/register"
-            className="mt-2 flex min-h-[46px] items-center gap-2 rounded-lg bg-white px-6 text-sm font-semibold text-blue-600 transition-colors hover:bg-blue-50"
+      <section className="pb-12 sm:pb-16">
+        <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.5 }}
+            className="mx-auto flex max-w-4xl flex-col items-center gap-4 rounded-2xl bg-blue-600 px-6 py-10 text-center sm:py-12"
           >
-            Get Started Free
-            <FiArrowRight className="h-4 w-4" />
-          </Link>
-        </motion.div>
+            <h2 className="text-2xl font-bold text-white sm:text-3xl">
+              Ready to Start Your Journey?
+            </h2>
+            <p className="max-w-md text-sm text-blue-100 sm:text-base">
+              Join thousands of learners already using CareerPilot AI to reach their dream careers.
+            </p>
+            <Link
+              href="/register"
+              className="mt-2 flex min-h-[46px] items-center gap-2 rounded-lg bg-white px-6 text-sm font-semibold text-blue-600 transition-colors hover:bg-blue-50"
+            >
+              Get Started Free
+              <FiArrowRight className="h-4 w-4" />
+            </Link>
+          </motion.div>
+        </div>
       </section>
     </main>
   );

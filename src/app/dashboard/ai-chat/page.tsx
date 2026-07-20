@@ -265,7 +265,7 @@ export default function AIChatPage() {
           disabled={sendMutation.isPending || !input.trim()}
           className="btn btn-primary btn-md h-[44px] w-[44px] rounded-xl p-0"
         >
-          <FiSend className="h-10 w-10" />
+          <FiSend />
         </button>
       </div>
     </div>

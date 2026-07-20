@@ -33,7 +33,7 @@ async function fetchGoalById(id: string): Promise<Goal> {
 
 function DetailsSkeleton() {
   return (
-    <div className="mx-auto max-w-4xl animate-pulse px-4 py-8 sm:px-6 sm:py-10">
+    <div className="mx-auto max-w-7xl animate-pulse px-4 py-8 sm:px-6 sm:py-10 lg:px-8">
       <div className="skeleton mb-6 h-4 w-28 rounded-lg" />
       <div className="mb-6 grid grid-cols-1 gap-4 sm:grid-cols-2">
         <div className="skeleton h-24 rounded-2xl" />
@@ -63,7 +63,7 @@ export default function GoalDetailsPage() {
 
   if (isError || !goal) {
     return (
-      <div className="mx-auto max-w-4xl px-4 py-10 sm:px-6">
+      <div className="mx-auto max-w-7xl px-4 py-10 sm:px-6 lg:px-8">
         <button
           onClick={() => router.back()}
           className="btn btn-ghost btn-sm mb-6 gap-1.5 rounded-xl pl-0"

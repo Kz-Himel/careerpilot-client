@@ -59,7 +59,7 @@ export default function ExplorePage() {
   const resetPage = () => setPage(1);
 
   return (
-    <div className="section mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+    <div className="mx-auto max-w-7xl">
       <div className="mx-auto max-w-7xl">
         {/* Header */}
         <div className="section-header flex flex-col items-center text-center mx-auto">
