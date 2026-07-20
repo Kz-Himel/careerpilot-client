@@ -142,7 +142,7 @@ export default function FeaturesPage() {
             </p>
             <Link
               href="/register"
-              className="mt-2 flex min-h-[46px] items-center gap-2 rounded-lg bg-white px-6 text-sm font-semibold text-blue-600 transition-colors hover:bg-blue-50"
+              className="mt-2 flex min-h-[46px] items-center gap-2 rounded-lg bg-white px-6 text-sm font-semibold text-violet-600 transition-colors hover:bg-violet-50"
             >
               Get Started Free
               <FiArrowRight className="h-4 w-4" />
