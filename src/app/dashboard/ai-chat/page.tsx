@@ -195,16 +195,16 @@ export default function AIChatPage() {
           >
             <div
               className={`flex h-8 w-8 shrink-0 items-center justify-center rounded-full ${msg.role === "user"
-                  ? "bg-slate-100 text-slate-600"
-                  : "bg-gradient-to-br from-indigo-50 to-violet-50 text-indigo-600"
+                ? "bg-slate-100 text-slate-600"
+                : "bg-gradient-to-br from-indigo-50 to-violet-50 text-indigo-600"
                 }`}
             >
               {msg.role === "user" ? <FiUser className="h-4 w-4" /> : <FiCpu className="h-4 w-4" />}
             </div>
             <div
               className={`max-w-[75%] rounded-2xl px-4 py-3 text-sm leading-relaxed sm:max-w-[70%] ${msg.role === "user"
-                  ? "bg-gradient-to-r from-indigo-600 to-violet-600 text-white shadow-sm"
-                  : "border border-slate-100 bg-slate-50 text-slate-700"
+                ? "bg-gradient-to-r from-indigo-600 to-violet-600 text-white shadow-sm"
+                : "border border-slate-100 bg-slate-50 text-slate-700"
                 }`}
             >
               {msg.content}
@@ -248,21 +248,21 @@ export default function AIChatPage() {
         </div>
       )}
 
-      <div className="mt-3 flex items-center gap-2">
+      <div className="mt-3 flex items-center gap-1.5 sm:gap-2 w-full">
         <input
           type="text"
           value={input}
           onChange={(e) => setInput(e.target.value)}
           onKeyDown={(e) => e.key === "Enter" && handleSend()}
           placeholder="Ask anything..."
-          className="form-input flex-1 rounded-xl"
+          className="form-input flex-1 h-10 sm:h-11 text-xs sm:text-sm px-3 sm:px-4 rounded-xl"
         />
         <button
           onClick={() => handleSend()}
           disabled={sendMutation.isPending || !input.trim()}
-          className="btn btn-primary btn-md flex h-[44px] w-[44px] items-center justify-center rounded-xl p-0 transition-colors"
+          className="btn btn-primary flex h-10 w-10 sm:h-11 sm:w-11 shrink-0 items-center justify-center rounded-xl p-0 transition-all"
         >
-          <FiSend className="h-5 w-5" />
+          <FiSend className="h-[18px] w-[18px] sm:h-5 sm:w-5 shrink-0" />
         </button>
       </div>
     </div>

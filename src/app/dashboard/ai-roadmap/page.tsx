@@ -179,19 +179,19 @@ export default function AIRoadmapPage() {
               <select
                 value={form.savedGuideId || ""}
                 onChange={(e) => handleSavedGuideChange(e.target.value)}
-                className="form-select pl-11"
+                className="form-select pl-10"
               >
-                <option value="">-- Select from your saved goals --</option>
+                <option value="">&nbsp; -- Select from your saved goals --</option>
                 {isLoadingGuides ? (
-                  <option disabled value="">Loading saved goals...</option>
+                  <option disabled value="">&nbsp; Loading saved goals...</option>
                 ) : savedGuides && savedGuides.length > 0 ? (
                   savedGuides.map((guide) => (
                     <option key={guide._id} value={guide._id}>
-                      {guide.title}
+                      &nbsp; {guide.title}
                     </option>
                   ))
                 ) : (
-                  <option disabled value="">No saved goals found</option>
+                  <option disabled value="">&nbsp; No saved goals found</option>
                 )}
               </select>
             </div>
@@ -235,11 +235,11 @@ export default function AIRoadmapPage() {
                 onChange={(e) =>
                   setForm((p) => ({ ...p, experienceLevel: e.target.value as ExtendedRoadmapFormInput["experienceLevel"] }))
                 }
-                className="form-select pl-11"
+                className="form-select pl-10"
               >
-                <option value="beginner">Beginner</option>
-                <option value="intermediate">Intermediate</option>
-                <option value="advanced">Advanced</option>
+                <option value="beginner">&nbsp; Beginner</option>
+                <option value="intermediate">&nbsp; Intermediate</option>
+                <option value="advanced">&nbsp; Advanced</option>
               </select>
             </div>
           </div>
@@ -256,11 +256,11 @@ export default function AIRoadmapPage() {
                     desiredDurationMonths: Number(e.target.value) as ExtendedRoadmapFormInput["desiredDurationMonths"],
                   }))
                 }
-                className="form-select pl-11"
+                className="form-select pl-10"
               >
-                <option value={3}>3 Months (Quick Start)</option>
-                <option value={6}>6 Months (Standard)</option>
-                <option value={12}>12 Months (In-Depth)</option>
+                <option value={3}>&nbsp; 3 Months (Quick Start)</option>
+                <option value={6}>&nbsp; 6 Months (Standard)</option>
+                <option value={12}>&nbsp; 12 Months (In-Depth)</option>
               </select>
             </div>
           </div>
@@ -310,12 +310,12 @@ export default function AIRoadmapPage() {
                 onChange={(e) =>
                   setForm((p) => ({ ...p, weeklyStudyHours: Number(e.target.value) }))
                 }
-                className="form-select pl-11"
+                className="form-select pl-10"
               >
-                <option value={5}>5 hrs</option>
-                <option value={10}>10 hrs</option>
-                <option value={15}>15 hrs</option>
-                <option value={20}>20+ hrs</option>
+                <option value={5}>&nbsp; 5 hrs</option>
+                <option value={10}>&nbsp; 10 hrs</option>
+                <option value={15}>&nbsp; 15 hrs</option>
+                <option value={20}>&nbsp; 20+ hrs</option>
               </select>
             </div>
           </div>
