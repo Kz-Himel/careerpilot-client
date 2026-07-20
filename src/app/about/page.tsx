@@ -70,7 +70,7 @@ export default function AboutPage() {
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
             transition={{ duration: 0.5 }}
-            className="mx-auto grid max-w-4xl grid-cols-2 gap-4 rounded-2xl border border-gray-100 bg-white p-6 shadow-sm sm:grid-cols-4 sm:p-8"
+            className="mx-auto grid max-w-7xl grid-cols-2 gap-4 rounded-2xl border border-gray-100 bg-white p-6 shadow-sm sm:grid-cols-4 sm:p-8"
           >
             {stats.map((stat) => (
               <div key={stat.label} className="text-center">
@@ -85,7 +85,8 @@ export default function AboutPage() {
       {/* Mission */}
       <section className="pb-12 sm:pb-16">
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-          <div className="mx-auto grid max-w-4xl grid-cols-1 items-center gap-4 lg:grid-cols-2 lg:gap-12">
+          {/* max-w-4xl থেকে max-w-7xl এ পরিবর্তন */}
+          <div className="mx-auto grid max-w-7xl grid-cols-1 items-center gap-6 lg:grid-cols-2 lg:gap-12">
             <motion.div
               initial={{ opacity: 0, y: 24 }}
               whileInView={{ opacity: 1, y: 0 }}
@@ -109,7 +110,7 @@ export default function AboutPage() {
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
               transition={{ duration: 0.5, delay: 0.08 }}
-              className="flex items-center justify-center"
+              className="flex items-center justify-center lg:justify-end"
             >
               <div className="flex h-56 w-56 items-center justify-center rounded-2xl bg-blue-50 sm:h-64 sm:w-64">
                 <span className="text-6xl">🎯</span>
@@ -122,7 +123,8 @@ export default function AboutPage() {
       {/* Values */}
       <section className="pb-12 sm:pb-16">
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-          <div className="mx-auto max-w-4xl">
+          {/* max-w-4xl থেকে max-w-7xl এ পরিবর্তন */}
+          <div className="mx-auto max-w-7xl">
             <motion.h2
               initial={{ opacity: 0, y: 20 }}
               whileInView={{ opacity: 1, y: 0 }}
@@ -133,7 +135,8 @@ export default function AboutPage() {
               What We Value
             </motion.h2>
 
-            <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-4">
+            {/* features grid এর সাথে মিল রেখে লেআউট রেসপনসিভনেস রি-ডিজাইন করা হয়েছে */}
+            <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
               {values.map((value, i) => {
                 const Icon = value.icon;
                 return (

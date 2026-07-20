@@ -42,7 +42,7 @@ export default function FAQ() {
   return (
     <section className="pb-12 sm:pb-16">
       <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-        <div className="mx-auto max-w-4xl">
+        <div className="mx-auto w-full">
           {/* Header */}
           <motion.div
             initial={{ opacity: 0, y: 20 }}
