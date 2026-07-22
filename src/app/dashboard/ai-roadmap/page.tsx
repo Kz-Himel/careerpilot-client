@@ -158,7 +158,7 @@ export default function AIRoadmapPage() {
   };
 
   return (
-    <div className="mx-auto max-w-5xl">
+    <div className="mx-auto max-w-5xl px-10 sm:px-5">
       <div className="mb-6 sm:mb-8">
         <h1 className="heading-page">AI Career Roadmap Generator</h1>
         <p className="mt-1.5 text-body">Tell us your goal and get a personalized roadmap.</p>
