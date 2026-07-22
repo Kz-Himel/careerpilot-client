@@ -69,6 +69,10 @@ function StatCardSkeleton() {
 }
 
 export default function DashboardPage() {
+  // User profile / session data fetch
+  const { data: session } = authClient.useSession();
+  const userName = session?.user?.name || "there";
+
   const { data: stats, isLoading: statsLoading, isError: statsError, error: statsErrorObj } = useQuery({
     queryKey: ["dashboard-stats"],
     queryFn: fetchStats,
@@ -82,7 +86,7 @@ export default function DashboardPage() {
   return (
     <div className="mx-auto max-w-6xl p-10 sm:p-5">
       <div className="mb-6 sm:mb-8">
-        <h1 className="heading-page">Welcome back! 👋</h1>
+        <h1 className="heading-page">Welcome back, {userName}! 👋</h1>
         <p className="mt-1.5 text-body">Let&apos;s continue your journey toward your dream career.</p>
       </div>
 
